@@ -5,12 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="https://use.typekit.net/rxn5gwq.css">
+    <link rel="stylesheet" href="style.css"/>
     <style> body {padding: 0; margin: 0;} </style>
     <script src="p5js/p5.min.js"></script>
 
     <script src="generator.js"></script>
   </head>
   <body>
+    
+    <div id="interface">
+      <form>
+        <input id="input_headline">
+        <input id="input_subheadline">
+        <input id="input_text_1">
+        <input id="input_text_2">
+        <input id="input_text_3">
+        <input id="apply_button" type="button" value="Apply">
+      </form>
+      <select id="select_background">
+        <option value="Picture 1">Picture 1</option>
+        <option value="Picture 2">Picture 2</option>
+        <option value="Picture 3">Picture 3</option>
+      </select>
+    </div>
   </body>
 </html>
