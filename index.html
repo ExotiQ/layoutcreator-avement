@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
+<html>
+<head>
+<title>Avément Layoutgenerator</title>
+<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -10,23 +11,117 @@
     <script src="p5js/p5.min.js"></script>
 
     <script src="generator.js"></script>
-  </head>
-  <body>
+
+
+<link rel="stylesheet" href="./style.css">
+<script src="./nav.js"></script>
+<script src="https://kit.fontawesome.com/b860338d55.js" crossorigin="anonymous"></script>
+
+</head>
+<header>
+    <top-nav>
+            <img class="logo" src="./src/avement_logo_white.svg">
+            <span class="heading">LAYOUT CREATOR</span>
+    </top-nav>
+</header>
+<body>
+
+
+
+<section id="workspace">
+</section>
+
+<side-nav>
+    <div id="icon-menu">
+        <div class="icon-menu-item active" id="general">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="icon-menu-item" id="size">
+            <i class="fas fa-ruler-horizontal"></i>
+        </div>
+        <div class="icon-menu-item" id="background">
+            <i class="fas fa-image"></i>
+        </div>
+        <div class="icon-menu-item" id="text">
+            <i class="fas fa-font"></i>
+        </div>
+        <div class="icon-menu-item" id="export">
+            <i class="fas fa-file-export"></i>
+        </div>
     
-    <div id="interface">
-      <form>
-        <input id="input_headline">
-        <input id="input_subheadline">
-        <input id="input_text_1">
-        <input id="input_text_2">
-        <input id="input_text_3">
-        <input id="apply_button" type="button" value="Apply">
-      </form>
-      <select id="select_background">
-        <option value="Picture 1">Picture 1</option>
-        <option value="Picture 2">Picture 2</option>
-        <option value="Picture 3">Picture 3</option>
-      </select>
     </div>
-  </body>
-</html>
+    <div id="settings">
+        <!-- GENERAL -->
+        <div class="settings-container active" id="general">
+            <h1 class="settings-title">USECASE</h1>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+        </div>
+
+        <!-- SIZE -->
+        <div class="settings-container" id="size">
+            <h1 class="settings-title">SUGGESTED</h1>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+        </div>
+
+        <div class="settings-container" id="background">
+            <h1 class="settings-title">BACKGROUND</h1>
+
+            <select id="select_background">
+              <option value="Picture 1">Picture 1</option>
+              <option value="Picture 2">Picture 2</option>
+              <option value="Picture 3">Picture 3</option>
+            </select>
+        </div>
+
+        <div class="settings-container" id="text">
+          <form>
+            <input id="input_headline">
+            <input id="input_subheadline">
+            <input id="input_text_1">
+            <input id="input_text_2">
+            <input id="input_text_3">
+            <input id="apply_button" type="button" value="Apply">
+          </form>
+        </div>
+
+        <div class="settings-container" id="export">
+            <h1 class="settings-title">EXPORT</h1>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+
+            <div class="container">
+                <span class="title">Werbeplakat</span>
+                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+            </div>
+        </div>
+    </div>
+</side-nav>
+
+</body>
+</html> 

@@ -1,44 +1,136 @@
-body
-{
-    display: grid;
-    grid-template-columns: auto 500px;
-    background-color: rgb(114, 114, 114);
-    justify-content: left;
+/* END KARL */
+@import url('https://fonts.googleapis.com/css?family=Butterfly+Kids|Roboto');
 
+* {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
-body>*
-{
-    margin: 50px;
+header {
+    position: fixed;
+    top: 0px;
+    height: 70px;
+    width: 100%;
+    background-color: #222222;
 }
 
-canvas
-{
-    grid-column-start: 1;
-    grid-row-start: 1;
+body {
+    display: flex;
+    position: absolute;
+    top: 70px;
+    width: 100%;
+    height: calc( 100% - 70px );
+    background-color: #8f1616;;
 }
 
-form
-{
-    grid-column-start: 2;
-    grid-row-start: 1;
+top-nav .logo {
+    padding: 0px 20px;
+    max-height: 70px;
+}
+
+top-nav {
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+top-nav .heading {
+    color: #ffff;
+    font-size: 36px;
+}
+
+i {
+    width: 48px;
+    height: 48px;
+    box-sizing: border-box;
+}
+
+.fas {
+    color: #fff;
+    font-size: 32px;
+    text-align: center;
+    line-height: 48px;
+}
+
+
+#workspace {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    background-color: #888888;
+    justify-content: center;
+    align-content: center;
+}
+
+side-nav {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    background-color: #4B4B4B;
+}
+
+side-nav #settings {
+    width: 100%;
+}
+
+.settings-container {
+    overflow-y: scroll;
+    max-height: 100%;
+    flex-flow: row wrap;
+    position: relative;
+    height: 100%;
+    align-content: baseline;
+    display: none;
+}
+
+.settings-container.active {
+    display: flex;
+}
+
+side-nav #settings .container {
+    color: #000000;
+    height: calc( 14vw - 70px );
+    background-color: #F6F6F6;
+    border-radius: 5px;
+    width: calc( 14vw - 70px );
+    margin: 0.5vw;
+    padding: 0.5vw;
+}
+
+side-nav .settings-title {
+    color: #F6F6F6;
+    width: calc( 14vw - 70px );
+    margin: 0.5vw;
+    padding: 0.5vw;
+    flex: 100%;
+}
+
+.settings-container .title {
+    color: #000000;
+    font-size: 36px;
+}
+
+.settings-container .descritpion {
+    color: #000000;
+    
+}
+
+side-nav #icon-menu {
+    width: 70px;
+    background-color: #222222;
     display: flex;
     flex-direction: column;
 }
 
-input
-{
-    margin: 20px;
+side-nav .icon-menu-item{
+    padding: 11px;
 }
 
-select
-{
-    grid-column-start: 2;
-    grid-row-start: 2;
+side-nav .icon-menu-item:hover, side-nav .icon-menu-item.active {
+    background-color: #4B4B4B;
 }
 
-#apply_button
-{
-    width: 200px;
-    height: 100px;
+.icon-menu-item#export {
+    margin-top: auto;
 }
+

@@ -379,15 +379,19 @@ function preload()
 
 function setup()
 {
+    var canvas;
+    
     
     
     if(background_img.width < background_img.height)
     {
-        createCanvas(1480, 2100);
+        canvas = createCanvas(1480, 2100);
+        
     } else
     {
-        createCanvas(2100, 1480);
+        canvas = createCanvas(2100, 1480);
     }
+    canvas.parent('workspace');
     abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
 
  
@@ -401,17 +405,36 @@ function setup()
 
 function draw()
 {
-    noLoop();
 
-    print("leel")
-    
+    frameRate(5);
+
+    print(windowHeight);
+
+    let workspace_width = 0.7 * windowWidth;
+    let workspace_height = windowHeight - 70;
+    let workspace_ratio = workspace_width / workspace_height;
+
     if(background_img.width < background_img.height)
     {
+        format_ratio = 1480 / 2100;
         resizeCanvas(1480, 2100);
     } else
     {
+        format_ratio = 2100 / 1480;
         resizeCanvas(2100, 1480);
     }
+
+    print(format_ratio);
+
+    if(format_ratio > workspace_ratio)
+    {
+        resizeCanvas(workspace_width, height * (workspace_width / width));
+    } else
+    {
+        resizeCanvas(width * (workspace_height / height), workspace_height);
+    }
+    
+
     abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
     
 
