@@ -1,17 +1,17 @@
 
 let background_img;
 let logo;
-
-let canvas_scale = 0.3;
+let logo_2;
 
 const Y_AXIS = 1;
 const X_AXIS = 2;
 
-const margins = [12, 10, 12, 10];
+let margins;
 let abs_margins;
-const grid_increment = 40;
-let num_cols = 4;
-let col_margin = 30;
+let grid_increment;
+let num_cols;
+let col_margin;
+let col_width;
 
 let montserrat_extrabold;
 let montserrat_medium;
@@ -20,7 +20,7 @@ let politica_ultra;
 let politica_bold;
 let politica_medium;
 
-let font_size = 100;
+let font_size;
 
 let headline = "SKATE CONTEST";
 let subheadline = "AUGSBURG 2021";
@@ -28,13 +28,45 @@ let text_1 = "12.07.2021, 15 - 18h";
 let text_2 = "FREE FOOD & DRINKS, DJ, PRIZES";
 let text_3 = "Henrys Skateland - Second Street 2, 86163 Augsburg";
 
+let vans_logo = [];
+let thrasher_logo = [];
+let bones_logo = [];
+let titus_logo = [];
+
 let default_background = "Picture 3"
+
+let layouts = [];
+let current_layout = 1;
+
+let format = 1;
+let canvas_scale = 0.9;
+
+let dark_layout = false;
 
 let c_0;
 let c_1;
 let yellow_01;
+let red_01;
 
 let toggle_grid = false;
+
+class Layout
+{
+    constructor(name, attributes, num_text_fields, text_field_names, default_text, layout_function)
+    {
+        this.name = name;
+        this.attributes = attributes;
+        this.draw_function = layout_function;
+        this.num_text_fields = num_text_fields;
+        this.text_field_names = text_field_names;
+        this.default_text = default_text;
+    }
+
+    draw()
+    {
+        this.draw_function();
+    }
+}
 
 
 function grid_line(row)
@@ -44,8 +76,8 @@ function grid_line(row)
 
 function grid_snap(y_pos)
 {
-    let remainder = (int(y_pos) - abs_margins[0]) % grid_increment;
-    return (int(y_pos) - remainder + (remainder > (grid_increment / 2)) * grid_increment);
+    let remainder = (Math.round(y_pos) - abs_margins[0]) % grid_increment;
+    return (Math.round(y_pos) - remainder + (remainder > (grid_increment / 2)) * grid_increment);
 }
 
 function get_num_lines()
@@ -55,7 +87,7 @@ function get_num_lines()
 
 function column(n)
 {
-    let col_width = (width - 2 * abs_margins[1]) / num_cols;
+    
     return abs_margins[1] + n * col_width;
 }
 
@@ -218,29 +250,249 @@ function style_3()
 
 }
 
-function style_4()
+function vertical_layout_1()
 {
+    let workspace_width = 0.7 * windowWidth;
+    let workspace_height = windowHeight - 70;
+    
+    resizeCanvas(1480, 2100);
+    resizeCanvas(width * (workspace_height / height), workspace_height);
+
+    // adjusting global layout parameters
+    margins = [10, 10, 10, 10];
+    num_cols = 4;
+    abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
+    grid_increment = height / 50;
+    col_margin = width / 20;
+    font_size = height / 25;
+    col_width = (width - 2 * abs_margins[1]) / num_cols;
+
+    // placing the background image
+    scaled_background_image(background_img);
+
+    // creating bottom gradient
     let box_y = grid_snap(height * 0.4);
     setGradient(0, box_y, width, height - box_y, c_0, c_1, Y_AXIS);
 
-    let base_height = grid_snap(0.73 * height);
+    let base_height = grid_increment * 36;
 
+    // placing the headline
     textAlign(CENTER);
     noStroke();
     fill(yellow_01);
     textFont(industry_black_italic);
-    justified_text(headline, width/2, base_height, width - (2 * abs_margins[1]) , 500, 50);
+    justified_text(headline, width/2, abs_margins[0], width - (2 * abs_margins[1]) , 500, 50, 'TOP');
 
+    // creating the three lines of text
     textAlign(LEFT);
     fill(255);
     textFont(politica_ultra);
 
-    let text_1_height = justified_text(text_1, column(0), base_height + 5 * grid_increment, column(3) - column(0) - (col_margin / 2));
+    let text_1_height = justified_text(text_1, column(0), base_height + 5 * grid_increment, column(3) - column(0) - (col_margin / 2), 2.1 * font_size, 0.5 * font_size);
     let text_2_height = justified_text(text_2, column(0), base_height + 7 * grid_increment, column(3) - column(0) - (col_margin / 2));
 
     textFont(politica_medium);
 
     let text_3_height = justified_text(text_3, column(0), base_height + 9 * grid_increment, column(3) - column(0) - (col_margin / 2));
+
+    // placing the logo
+    push()
+    translate(column(3), base_height + 5 * grid_increment - 0.75 * text_1_height);
+    let scale_factor = (4 * grid_increment + 0.75 * text_1_height) / logo_2.height
+    scale(scale_factor);
+    image(logo_2, (col_width - (logo_2.width * scale_factor)) / scale_factor, 0);
+    pop();    
+}
+
+function vertical_layout_2()
+{
+    let workspace_width = 0.7 * windowWidth;
+    let workspace_height = windowHeight - 70;
+
+    resizeCanvas(1480, 2100);
+    resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
+    // adjusting global layout parameters
+    margins = [2.5, 2.5, 2.5, 2.5];
+    num_cols = 4;
+    abs_margins = [(height * margins[0]) / 100, (height * margins[0]) / 100, (height * margins[2]) / 100, (height * margins[0]) / 100];
+    grid_increment = 0.025 * height;
+    col_margin = 0;
+    font_size = height / 25;
+    col_width = (width - 2 * abs_margins[1]) / num_cols;
+
+    // setting the background color
+    background(255);
+
+    // placing the image
+    let inner_width = width - 2 * abs_margins[0];
+    let inner_height = height - 2 * abs_margins[0];
+    let t_image_width = 0.8 * inner_width;
+    let t_image_height = 0.70 * inner_height;
+    let t_image_ratio = t_image_width / t_image_height;
+
+    let headline_space = abs_margins[1] + 0.2 * inner_width;
+
+    if(background_img.height / background_img.width > 1)
+    {
+    image(background_img, 
+          headline_space, abs_margins[0], 
+          t_image_width, t_image_height, 
+          0, 
+          0, 
+          background_img.width, 
+          background_img.width / t_image_ratio);
+    }
+    else
+    {
+        print('eeee')
+        image(background_img, 
+            headline_space, abs_margins[0], 
+            t_image_width, t_image_height, 
+            0, 
+            0, 
+            background_img.height *  t_image_ratio, 
+            background_img.height); 
+    }
+
+    draw_logo(inner_width, 2*abs_margins[0] + logo.height, 220, "RIGHT");
+
+    push();
+    translate(0, height);
+    rotate(-0.5 * PI);
+
+    textAlign(RIGHT);
+    noStroke();
+    fill(red_01);
+    textFont(industry_black_italic);
+
+    justified_text(headline, 
+                   inner_height + 0.5 * abs_margins[0], 
+                   abs_margins[0] + 0.15  * inner_width, 
+                   inner_height , 
+                   inner_width - t_image_width - abs_margins[0],
+                   50, 
+                   'MID');
+
+    //  rect(abs_margins[0], abs_margins[1] + 0.083 * inner_width - 0.02 * width, height - 3 * abs_margins[0] - headline_length, 0.04 * width)
+    pop();
+
+    textAlign(LEFT);
+    fill(0);
+    textFont(politica_ultra);
+
+    let base_height = 1.5 * abs_margins[0] + t_image_height;
+    let height_increment = 0;
+    let spacing = 0.4 * abs_margins[0]
+    let text_1_height = justified_text(text_1, 
+                                       headline_space, 
+                                       base_height + height_increment, 
+                                       inner_width - headline_space + abs_margins[1], 
+                                       2.1 * font_size, 
+                                       0.5 * font_size, 
+                                       'TOP');
+    height_increment += text_1_height + 0.3 * abs_margins[0];
+    let text_2_height = justified_text(text_2, 
+                                       headline_space, 
+                                       base_height + height_increment, 
+                                       inner_width - headline_space + abs_margins[1], 
+                                       2.1 * font_size, 
+                                       0.5 * font_size, 
+                                       'TOP');
+    height_increment += text_2_height + spacing;
+
+    textFont(politica_bold);
+
+    let text_3_height = justified_text(text_3, 
+                                       headline_space, 
+                                       base_height + height_increment, 
+                                       inner_width - headline_space + abs_margins[1], 
+                                       2.1 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    height_increment += text_3_height + spacing;
+
+    let text_4_height = justified_text(this.default_text[4], 
+                                       headline_space, 
+                                       base_height + height_increment, 
+                                       inner_width - headline_space + abs_margins[1], 
+                                       2.1 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    height_increment += text_4_height + spacing;
+
+    let text_5_height = justified_text(this.default_text[5], 
+                                       headline_space, 
+                                       base_height + height_increment, 
+                                       inner_width - headline_space + abs_margins[1], 
+                                       2.1 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    justified_images([logo, thrasher_logo[0], bones_logo[0], titus_logo[0], vans_logo[0 ]], 
+                     headline_space, 
+                     height - abs_margins[0],
+                     inner_width - headline_space + abs_margins[1], 
+                     0.3,
+                     'BOTTOM'
+                     )
+
+
+}
+
+function square_layout_1()
+{
+    let workspace_width = 0.7 * windowWidth;
+    let workspace_height = windowHeight - 70;
+    
+    resizeCanvas(1480, 2100);
+    resizeCanvas(width * (workspace_height / height), workspace_height);
+
+    // adjusting global layout parameters
+    margins = [10, 10, 10, 10];
+    num_cols = 4;
+    abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
+    grid_increment = height / 50;
+    col_margin = width / 20;
+    font_size = height / 25;
+    col_width = (width - 2 * abs_margins[1]) / num_cols;
+
+    // placing the background image
+    scaled_background_image(background_img);
+
+    // creating bottom gradient
+    let box_y = grid_snap(height * 0.4);
+    setGradient(0, box_y, width, height - box_y, c_0, c_1, Y_AXIS);
+
+    let base_height = grid_increment * 36;
+
+    // placing the headline
+    textAlign(CENTER);
+    noStroke();
+    fill(yellow_01);
+    textFont(industry_black_italic);
+    justified_text(headline, width/2, abs_margins[0], width - (2 * abs_margins[1]) , 500, 50, 'TOP');
+
+    // creating the three lines of text
+    textAlign(LEFT);
+    fill(255);
+    textFont(politica_ultra);
+
+    let text_1_height = justified_text(text_1, column(0), base_height + 5 * grid_increment, column(3) - column(0) - (col_margin / 2), 2.1 * font_size, 0.5 * font_size);
+    let text_2_height = justified_text(text_2, column(0), base_height + 7 * grid_increment, column(3) - column(0) - (col_margin / 2));
+
+    textFont(politica_medium);
+
+    let text_3_height = justified_text(text_3, column(0), base_height + 9 * grid_increment, column(3) - column(0) - (col_margin / 2));
+
+    // placing the logo
+    push()
+    translate(column(3), base_height + 5 * grid_increment - 0.75 * text_1_height);
+    let scale_factor = (4 * grid_increment + 0.75 * text_1_height) / logo_2.height
+    scale(scale_factor);
+    image(logo_2, (col_width - (logo_2.width * scale_factor)) / scale_factor, 0);
+    pop();    
 }
 
 function show_grid()
@@ -286,34 +538,57 @@ function change_background()
     }
 }
 
-function justified_text(theText, x, y, width)
+function picture_brightness()
+{
+
+}
+
+function justified_text(theText, x, y, width, h_align = '')
 {
     textSize(100);
     let fontSize = 100 * (width / textWidth(theText));
     textSize(fontSize);
-    text(theText, x, y);
+    if(h_align == 'TOP')
+    {
+        text(theText, x, y + fontSize);
+    }
+    else if (h_align == 'MID')
+    {
+        text(theText, x, y + 0.5 * fontSize);
+    }
+    else 
+    {
+        text(theText, x, y);
+    }
     return fontSize;
 }
 
-function justified_text(theText, x, y, width, max_size, min_size)
+function justified_text(theText, x, y, width, max_size, min_size, h_align = '')
 {
     textSize(100);
     let fontSize = 100 * (width / textWidth(theText));
     if(fontSize > max_size)
     {
+        fontSize = max_size;
         textSize(max_size);
-        return max_size;
     } 
     else if (fontSize < min_size)
     {
+        fontSize = min_size;
         textSize(min_size);
-        return min_size;
     }
     else 
     {
         textSize(fontSize);
     }
-    text(theText, x, y);
+    if(h_align == 'TOP')
+    {
+        text(theText, x, y + 0.9 * fontSize);
+    }
+    else 
+    {
+        text(theText, x, y);
+    }
     return fontSize;
 }
 
@@ -337,6 +612,28 @@ function safe_justified_text(theText, x, y, width, max_size, min_size)
     return fontSize;
 }
 
+function justified_images(images, x, y, width, scale, v_align)
+{
+    let image_width = 0;
+    for (let i = 0; i < images.length; i++)
+    {
+        image_width += scale * images[i].width;
+    }
+    let spacing = (width - image_width) / (images.length - 1);
+    let x_increment = x;
+
+
+    for(let i = 0; i < images.length; i++)
+    {
+        image(images[i], 
+              x_increment, 
+              y - (v_align == 'BOTTOM') * scale * images[i].height, 
+              scale * images[i].width, 
+              scale * images[i].height);
+              
+        x_increment += scale * images[i].width + spacing;
+    }
+}
 
 function mousePressed()
 {
@@ -363,18 +660,87 @@ function keyPressed()
 
 }
 
+function set_layout(name)
+{
+    for(let i = 0; i < layouts.length; i++)
+    {
+        if(layouts[i].name == name)
+        {
+            current_layout = i;
+            break;
+        }
+    }
+    
+}
+
+function get_layouts_by_attribute(attribute)
+{
+    let tmp = [];
+    
+    for(let i = 0; i < layouts.length; i++)
+    {
+        if(layouts[i].attributes.includes(attribute))
+        {
+            tmp.push(layouts[i].name);
+        }
+    }
+    return tmp;
+}
+
+function get_layouts_by_attributes(attributes)
+{
+    let tmp = [];
+    
+    if(attributes[0] == null)
+    {
+        return;
+    }
+    
+    for(let i = 0; i < layouts.length; i++)
+    {
+        let match = true;
+        for(let j = 0; j < attributes.lenth; j++)
+        {
+            if(!layouts[i].attributes.includes(attributes[j]))
+            {
+                match = false;
+            }
+        }
+        if(match)
+        {
+            tmp.push(layouts[i].name);
+        }
+    }
+    return tmp;
+}
+
+function set_format(width, height)
+{
+    format = width / height;
+}
+
 
 function preload()
 {
     background_img = loadImage("assets/pexels-jan-medium.jpg");
 
     logo = loadImage("assets/avement_logo_white.svg");
+    logo_2 = loadImage("assets/avement_logo_white_2.svg");
     montserrat_extrabold = loadFont("fonts/Montserrat/Montserrat-ExtraBold.ttf");
     montserrat_medium = loadFont("fonts/Montserrat/Montserrat-Medium.ttf");
     industry_black_italic = loadFont("fonts/Industry/Industry_Black_Italic.otf");
     politica_ultra = loadFont("fonts/Politica/Politica_Ultra.otf");
     politica_bold = loadFont("fonts/Politica/Politica_Bold.otf");
     politica_medium = loadFont("fonts/Politica/Politica_Medium.otf");
+
+    vans_logo.push(loadImage('assets/logos/vans_logo_white.png'));
+    vans_logo.push(loadImage('assets/logos/vans_logo_black.png'));
+    bones_logo.push(loadImage('assets/logos/bones_logo_white.png'));
+    bones_logo.push(loadImage('assets/logos/bones_logo_black.png'));
+    titus_logo.push(loadImage('assets/logos/titus_logo_white.png'));
+    titus_logo.push(loadImage('assets/logos/titus_logo_black.png'));
+    thrasher_logo.push(loadImage('assets/logos/thrasher_logo_white.png'));
+    thrasher_logo.push(loadImage('assets/logos/thrasher_logo_black.png'));
 } 
 
 function setup()
@@ -392,24 +758,44 @@ function setup()
         canvas = createCanvas(2100, 1480);
     }
     canvas.parent('workspace');
-    abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
 
  
     c_0 = color('rgba(0, 0, 0, 0)');
     c_1 = color('rgba(0, 0, 0, 1)');
     yellow_01 = color(246, 214, 9);
+    red_01 = color(210, 59, 59);
+
+    layouts.push(new Layout('din_poster_vertical_1', 
+                            ['poster', 'vertical', 'event'], 
+                            5, 
+                            ['Headline', 'Subheadline', 'Text 1', 'Text 2', 'Text 3'],
+                            ['SKATE CONTEST', 'AUGSBURG 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg'],
+                            vertical_layout_1));
+    layouts.push(new Layout('din_poster_vertical_2', 
+                            ['poster', 'vertical', 'event'], 
+                            6, 
+                            ['Headline', 'Text 1', 'Text 2', 'Text 3', 'Text 4', 'Text 5'],
+                            ['SKATE CONTEST', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg', 'Riders Confirmed: Matt Hoffman - Enarson - Matthias Danidos', 'Highest Ollie:200€ / Best Trick:200€ / Vert Ramp Contest:500€'],
+                            vertical_layout_2));
+    layouts.push(new Layout('instagram_ad_1', 
+                            ['instagram', 'vertical', 'horizontal'], 
+                            1, 
+                            ['Headline'],
+                            ['INSTAGRAM'],
+                            square_layout_1));
 
     init();
+
+    set_text_input()
 }
 
 
 function draw()
 {
 
-    frameRate(5);
+    frameRate(10);
 
-    print(windowHeight);
-
+    /*
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
     let workspace_ratio = workspace_width / workspace_height;
@@ -424,7 +810,6 @@ function draw()
         resizeCanvas(2100, 1480);
     }
 
-    print(format_ratio);
 
     if(format_ratio > workspace_ratio)
     {
@@ -433,20 +818,10 @@ function draw()
     {
         resizeCanvas(width * (workspace_height / height), workspace_height);
     }
+    */
     
 
-    abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
-    
-
-
-    //image(background_img, width / 2 - background_img.width / 2, 0);
-    background(255);
-    scaled_background_image(background_img);
-
-    print(width, height);
-    print(background_img);
-
-    
+    /*
     if(subheadline == "")
     {
         style_1();
@@ -454,7 +829,7 @@ function draw()
     } else if (height > width)
     {
         //style_2();
-        style_4();
+        vertical_layout_1();
         print("2")
     } else
     {
@@ -468,7 +843,10 @@ function draw()
         show_grid();
         show_columns();
     }
+    */
 
+    //vertical_layout_2();
+    layouts[current_layout].draw();
 }
 
 
@@ -481,6 +859,27 @@ function apply_changes()
     text_3 = document.getElementById('input_text_3').value;
 }
 
+function set_text_input()
+{
+    let text_input_form = document.getElementById('text_input_form');
+    while(text_input_form.firstChild)
+    {
+        text_input_form.removeChild(firstChild);
+    }
+    for(let i = 0; i < layouts[current_layout].num_text_fields; i++) 
+    {
+        let new_input = document.createElement('input');
+        new_input.setAttribute('id', layouts[current_layout].text_field_names[i]);
+        new_input.value = layouts[current_layout].default_text[i];
+        text_input_form.appendChild(new_input);
+    };
+
+    let apply_button = document.createElement('input');
+    apply_button.setAttribute('id', 'apply_button');
+    apply_button.setAttribute('type', 'button');
+    apply_button.setAttribute('value', 'Apply');
+    text_input_form.appendChild(apply_button);
+}
 function init()
 {
     document.getElementById('input_headline').value = headline;

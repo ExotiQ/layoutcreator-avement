@@ -20,7 +20,7 @@ body {
     top: 70px;
     width: 100%;
     height: calc( 100% - 70px );
-    background-color: #8f1616;;
+    background-color: #888888;;
 }
 
 top-nav .logo {
@@ -59,7 +59,7 @@ i {
     display: flex;
     background-color: #888888;
     justify-content: center;
-    align-content: center;
+    align-items: center;
 }
 
 side-nav {
@@ -133,4 +133,5 @@ side-nav .icon-menu-item:hover, side-nav .icon-menu-item.active {
 .icon-menu-item#export {
     margin-top: auto;
 }
+
 
