@@ -1,6 +1,7 @@
 
 let background_img;
 let logo;
+let logo_black;
 let logo_2;
 
 const Y_AXIS = 1;
@@ -22,12 +23,6 @@ let politica_medium;
 
 let font_size;
 
-let headline = "SKATE CONTEST";
-let subheadline = "AUGSBURG 2021";
-let text_1 = "12.07.2021, 15 - 18h";
-let text_2 = "FREE FOOD & DRINKS, DJ, PRIZES";
-let text_3 = "Henrys Skateland - Second Street 2, 86163 Augsburg";
-
 let vans_logo = [];
 let thrasher_logo = [];
 let bones_logo = [];
@@ -36,7 +31,7 @@ let titus_logo = [];
 let default_background = "Picture 3"
 
 let layouts = [];
-let current_layout = 1;
+let current_layout = 2;
 
 let format = 1;
 let canvas_scale = 0.9;
@@ -52,7 +47,7 @@ let toggle_grid = false;
 
 class Layout
 {
-    constructor(name, attributes, num_text_fields, text_field_names, default_text, layout_function)
+    constructor(name, attributes,  num_text_fields, text_field_names, default_text, layout_function)
     {
         this.name = name;
         this.attributes = attributes;
@@ -115,13 +110,13 @@ function setGradient(x, y, w, h, c1, c2, axis)
     }
 }
 
-function draw_logo(x, y, target_width, origin)
+function draw_logo(x, y, target_width, h_align)
 {
     let target_height = logo.height * target_width / logo.width;
-    if(origin === "RIGHT")
+    if(h_align === "RIGHT")
     {
         image(logo, x  - target_width, y - (target_height * 0.87), target_width, target_height , 0, 0, logo.width, logo.height);
-    } else if (origin === "CENTER")
+    } else if (h_align === "CENTER")
     {
         image(logo, x  - target_width/2, y - (target_height * 0.87), target_width, target_height, 0, 0, logo.width, logo.height);
 
@@ -256,7 +251,7 @@ function vertical_layout_1()
     let workspace_height = windowHeight - 70;
     
     resizeCanvas(1480, 2100);
-    resizeCanvas(width * (workspace_height / height), workspace_height);
+    resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
 
     // adjusting global layout parameters
     margins = [10, 10, 10, 10];
@@ -281,19 +276,30 @@ function vertical_layout_1()
     noStroke();
     fill(yellow_01);
     textFont(industry_black_italic);
-    justified_text(headline, width/2, abs_margins[0], width - (2 * abs_margins[1]) , 500, 50, 'TOP');
+    justified_text(this.default_text[0].toUpperCase(), width/2, abs_margins[0], width - (2 * abs_margins[1]) , 500, 50, 'TOP');
 
     // creating the three lines of text
     textAlign(LEFT);
     fill(255);
     textFont(politica_ultra);
 
-    let text_1_height = justified_text(text_1, column(0), base_height + 5 * grid_increment, column(3) - column(0) - (col_margin / 2), 2.1 * font_size, 0.5 * font_size);
-    let text_2_height = justified_text(text_2, column(0), base_height + 7 * grid_increment, column(3) - column(0) - (col_margin / 2));
+    let text_1_height = justified_text(this.default_text[2].toUpperCase(), 
+                                       column(0), 
+                                       base_height + 5 * grid_increment, 
+                                       column(3) - column(0) - (col_margin / 2), 
+                                       2.1 * font_size, 
+                                       0.5 * font_size);
+    let text_2_height = justified_text(this.default_text[3].toUpperCase(), 
+                                       column(0), 
+                                       base_height + 7 * grid_increment, 
+                                       column(3) - column(0) - (col_margin / 2));
 
     textFont(politica_medium);
 
-    let text_3_height = justified_text(text_3, column(0), base_height + 9 * grid_increment, column(3) - column(0) - (col_margin / 2));
+    let text_3_height = justified_text(this.default_text[4], 
+                                       column(0), 
+                                       base_height + 9 * grid_increment, 
+                                       column(3) - column(0) - (col_margin / 2));
 
     // placing the logo
     push()
@@ -344,7 +350,6 @@ function vertical_layout_2()
     }
     else
     {
-        print('eeee')
         image(background_img, 
             headline_space, abs_margins[0], 
             t_image_width, t_image_height, 
@@ -354,7 +359,7 @@ function vertical_layout_2()
             background_img.height); 
     }
 
-    draw_logo(inner_width, 2*abs_margins[0] + logo.height, 220, "RIGHT");
+    draw_logo(inner_width, 2*abs_margins[0] + 0.8 * logo.height, 0.23 * width, "RIGHT");
 
     push();
     translate(0, height);
@@ -365,7 +370,7 @@ function vertical_layout_2()
     fill(red_01);
     textFont(industry_black_italic);
 
-    justified_text(headline, 
+    justified_text(this.default_text[0].toUpperCase(), 
                    inner_height + 0.5 * abs_margins[0], 
                    abs_margins[0] + 0.15  * inner_width, 
                    inner_height , 
@@ -383,30 +388,30 @@ function vertical_layout_2()
     let base_height = 1.5 * abs_margins[0] + t_image_height;
     let height_increment = 0;
     let spacing = 0.4 * abs_margins[0]
-    let text_1_height = justified_text(text_1, 
+    let text_1_height = justified_text(this.default_text[1].toUpperCase(), 
                                        headline_space, 
                                        base_height + height_increment, 
                                        inner_width - headline_space + abs_margins[1], 
-                                       2.1 * font_size, 
+                                       1.5 * font_size, 
                                        0.5 * font_size, 
                                        'TOP');
     height_increment += text_1_height + 0.3 * abs_margins[0];
-    let text_2_height = justified_text(text_2, 
+    let text_2_height = justified_text(this.default_text[2].toUpperCase(), 
                                        headline_space, 
                                        base_height + height_increment, 
                                        inner_width - headline_space + abs_margins[1], 
-                                       2.1 * font_size, 
+                                       1.0 * font_size, 
                                        0.5 * font_size, 
                                        'TOP');
     height_increment += text_2_height + spacing;
 
     textFont(politica_bold);
 
-    let text_3_height = justified_text(text_3, 
+    let text_3_height = justified_text(this.default_text[3], 
                                        headline_space, 
                                        base_height + height_increment, 
                                        inner_width - headline_space + abs_margins[1], 
-                                       2.1 * font_size, 
+                                       0.6 * font_size, 
                                        0.3 * font_size, 
                                        'TOP');
 
@@ -416,7 +421,7 @@ function vertical_layout_2()
                                        headline_space, 
                                        base_height + height_increment, 
                                        inner_width - headline_space + abs_margins[1], 
-                                       2.1 * font_size, 
+                                       0.6 * font_size, 
                                        0.3 * font_size, 
                                        'TOP');
 
@@ -426,17 +431,18 @@ function vertical_layout_2()
                                        headline_space, 
                                        base_height + height_increment, 
                                        inner_width - headline_space + abs_margins[1], 
-                                       2.1 * font_size, 
+                                       0.6 * font_size, 
                                        0.3 * font_size, 
                                        'TOP');
 
-    justified_images([logo, thrasher_logo[0], bones_logo[0], titus_logo[0], vans_logo[0 ]], 
+    
+    justified_images([logo_black, thrasher_logo[0], bones_logo[0], titus_logo[0], vans_logo[0 ]], 
                      headline_space, 
                      height - abs_margins[0],
                      inner_width - headline_space + abs_margins[1], 
-                     0.3,
+                     1,
                      'BOTTOM'
-                     )
+                     ) 
 
 
 }
@@ -446,53 +452,34 @@ function square_layout_1()
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
     
-    resizeCanvas(1480, 2100);
-    resizeCanvas(width * (workspace_height / height), workspace_height);
+    resizeCanvas(1000, 1000);
+    resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
 
     // adjusting global layout parameters
     margins = [10, 10, 10, 10];
-    num_cols = 4;
     abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
     grid_increment = height / 50;
-    col_margin = width / 20;
     font_size = height / 25;
-    col_width = (width - 2 * abs_margins[1]) / num_cols;
 
     // placing the background image
     scaled_background_image(background_img);
 
     // creating bottom gradient
-    let box_y = grid_snap(height * 0.4);
+    let box_y = height * 0.4;
     setGradient(0, box_y, width, height - box_y, c_0, c_1, Y_AXIS);
 
-    let base_height = grid_increment * 36;
-
     // placing the headline
-    textAlign(CENTER);
+    textAlign(LEFT);
     noStroke();
     fill(yellow_01);
     textFont(industry_black_italic);
-    justified_text(headline, width/2, abs_margins[0], width - (2 * abs_margins[1]) , 500, 50, 'TOP');
+    justified_text(this.default_text[0], abs_margins[1], 0.7 * height, width - (2 * abs_margins[1]) , 7 * font_size, 0.5 * font_size, 'BOTTOM');
 
-    // creating the three lines of text
     textAlign(LEFT);
     fill(255);
-    textFont(politica_ultra);
-
-    let text_1_height = justified_text(text_1, column(0), base_height + 5 * grid_increment, column(3) - column(0) - (col_margin / 2), 2.1 * font_size, 0.5 * font_size);
-    let text_2_height = justified_text(text_2, column(0), base_height + 7 * grid_increment, column(3) - column(0) - (col_margin / 2));
-
-    textFont(politica_medium);
-
-    let text_3_height = justified_text(text_3, column(0), base_height + 9 * grid_increment, column(3) - column(0) - (col_margin / 2));
-
-    // placing the logo
-    push()
-    translate(column(3), base_height + 5 * grid_increment - 0.75 * text_1_height);
-    let scale_factor = (4 * grid_increment + 0.75 * text_1_height) / logo_2.height
-    scale(scale_factor);
-    image(logo_2, (col_width - (logo_2.width * scale_factor)) / scale_factor, 0);
-    pop();    
+    textFont(politica_bold);
+    justified_text(this.default_text[1], abs_margins[1], 0.7 * height + 0.01 * height, width - (2 * abs_margins[1]), 1.7 * font_size, 1* font_size, 'TOP' )
+    // creating the three lines of text
 }
 
 function show_grid()
@@ -516,7 +503,7 @@ function show_columns()
     }
 }
 
-function change_background()
+function change_current_picture()
 {
     let select = document.getElementById('select_background');
     switch (select.value)
@@ -612,14 +599,20 @@ function safe_justified_text(theText, x, y, width, max_size, min_size)
     return fontSize;
 }
 
-function justified_images(images, x, y, width, scale, v_align)
+function justified_images(images, x, y, t_width, scale, v_align)
 {
+    let image_scales = [];
+    for (let i = 0; i < images.length; i++)
+    {
+        image_scales[i] = (1 / sqrt(images[i].width * images[i].height)) * 70
+    }
+    
     let image_width = 0;
     for (let i = 0; i < images.length; i++)
     {
-        image_width += scale * images[i].width;
+        image_width += scale * 0.001 * width * image_scales[i] * images[i].width;
     }
-    let spacing = (width - image_width) / (images.length - 1);
+    let spacing = (t_width - image_width) / (images.length - 1);
     let x_increment = x;
 
 
@@ -627,11 +620,11 @@ function justified_images(images, x, y, width, scale, v_align)
     {
         image(images[i], 
               x_increment, 
-              y - (v_align == 'BOTTOM') * scale * images[i].height, 
-              scale * images[i].width, 
-              scale * images[i].height);
+              y - (v_align == 'BOTTOM') * scale * 0.001 * width * image_scales[i] * images[i].height, 
+              scale * 0.001 * width * image_scales[i] * images[i].width, 
+              scale * 0.001 * width * image_scales[i] * images[i].height);
               
-        x_increment += scale * images[i].width + spacing;
+        x_increment += scale * 0.001 * width * image_scales[i] * images[i].width + spacing;
     }
 }
 
@@ -650,6 +643,7 @@ function keyPressed()
 {
     if(keyCode == ENTER)
     {
+        apply_changes();
         redraw();
     } 
     else if(key == 'w')
@@ -670,7 +664,7 @@ function set_layout(name)
             break;
         }
     }
-    
+    set_text_input();
 }
 
 function get_layouts_by_attribute(attribute)
@@ -725,6 +719,7 @@ function preload()
     background_img = loadImage("assets/pexels-jan-medium.jpg");
 
     logo = loadImage("assets/avement_logo_white.svg");
+    logo_black = loadImage("assets/avement_logo_black.svg");
     logo_2 = loadImage("assets/avement_logo_white_2.svg");
     montserrat_extrabold = loadFont("fonts/Montserrat/Montserrat-ExtraBold.ttf");
     montserrat_medium = loadFont("fonts/Montserrat/Montserrat-Medium.ttf");
@@ -737,8 +732,8 @@ function preload()
     vans_logo.push(loadImage('assets/logos/vans_logo_black.png'));
     bones_logo.push(loadImage('assets/logos/bones_logo_white.png'));
     bones_logo.push(loadImage('assets/logos/bones_logo_black.png'));
-    titus_logo.push(loadImage('assets/logos/titus_logo_white.png'));
-    titus_logo.push(loadImage('assets/logos/titus_logo_black.png'));
+    titus_logo.push(loadImage('assets/logos/titus_logo_white_2.png'));
+    titus_logo.push(loadImage('assets/logos/titus_logo_black_2.png'));
     thrasher_logo.push(loadImage('assets/logos/thrasher_logo_white.png'));
     thrasher_logo.push(loadImage('assets/logos/thrasher_logo_black.png'));
 } 
@@ -746,8 +741,6 @@ function preload()
 function setup()
 {
     var canvas;
-    
-    
     
     if(background_img.width < background_img.height)
     {
@@ -775,97 +768,72 @@ function setup()
                             ['poster', 'vertical', 'event'], 
                             6, 
                             ['Headline', 'Text 1', 'Text 2', 'Text 3', 'Text 4', 'Text 5'],
-                            ['SKATE CONTEST', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg', 'Riders Confirmed: Matt Hoffman - Enarson - Matthias Danidos', 'Highest Ollie:200€ / Best Trick:200€ / Vert Ramp Contest:500€'],
+                            ['SKATE CONTEST 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg', 'Riders Confirmed: Matt Hoffman - Enarson - Matthias Danidos', 'Highest Ollie:200€ / Best Trick:200€ / Vert Ramp Contest:500€'],
                             vertical_layout_2));
     layouts.push(new Layout('instagram_ad_1', 
                             ['instagram', 'vertical', 'horizontal'], 
-                            1, 
-                            ['Headline'],
-                            ['INSTAGRAM'],
+                            2, 
+                            ['Headline', 'Subheadline'],
+                            ['SKATE CONTEST', 'AUGSBURG 2021'],
                             square_layout_1));
 
     init();
 
-    set_text_input()
+    set_text_input();
 }
 
 
 function draw()
 {
-
-    frameRate(10);
-
-    /*
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
-    let workspace_ratio = workspace_width / workspace_height;
 
-    if(background_img.width < background_img.height)
-    {
-        format_ratio = 1480 / 2100;
-        resizeCanvas(1480, 2100);
-    } else
-    {
-        format_ratio = 2100 / 1480;
-        resizeCanvas(2100, 1480);
-    }
+    let tmp_width = 1480;
+    let tmp_height = 2100;
+    target_area = (canvas_scale * tmp_width * (workspace_height / tmp_height)) * (canvas_scale * workspace_height);
 
+    let scaled_width = sqrt(target_area * format);
+    let scaled_height = scaled_width / format;
 
-    if(format_ratio > workspace_ratio)
-    {
-        resizeCanvas(workspace_width, height * (workspace_width / width));
-    } else
-    {
-        resizeCanvas(width * (workspace_height / height), workspace_height);
-    }
-    */
-    
-
-    /*
-    if(subheadline == "")
-    {
-        style_1();
-        print("1")
-    } else if (height > width)
-    {
-        //style_2();
-        vertical_layout_1();
-        print("2")
-    } else
-    {
-        style_3();
-        print("3")
-    }
-
-    if(toggle_grid)
-    {
-        stroke(255);
-        show_grid();
-        show_columns();
-    }
-    */
-
-    //vertical_layout_2();
+    frameRate(10);
     layouts[current_layout].draw();
 }
 
 
 function apply_changes()
 {
+    //pushes the text from the input boxes into the layout
+
+    /*
     headline = document.getElementById('input_headline').value.toUpperCase();
     subheadline = document.getElementById('input_subheadline').value;
     text_1 = document.getElementById('input_text_1').value;
     text_2 = document.getElementById('input_text_2').value;
     text_3 = document.getElementById('input_text_3').value;
+    */
+
+    let text_input_form = document.getElementById('text_input_form');
+    
+    let children = text_input_form.children;
+
+    for(let i = 0; i < layouts[current_layout].num_text_fields; i++)
+    {
+        layouts[current_layout].default_text[i] = children[i].value;
+    }
 }
 
 function set_text_input()
 {
+    //creates text input boxes in the sidebar according to how many the current layout requires
     let text_input_form = document.getElementById('text_input_form');
-    while(text_input_form.firstChild)
+    
+    let children = text_input_form.children;
+
+    while(children[0])
     {
-        text_input_form.removeChild(firstChild);
+        children[0].remove();
     }
+    
     for(let i = 0; i < layouts[current_layout].num_text_fields; i++) 
     {
         let new_input = document.createElement('input');
@@ -878,17 +846,16 @@ function set_text_input()
     apply_button.setAttribute('id', 'apply_button');
     apply_button.setAttribute('type', 'button');
     apply_button.setAttribute('value', 'Apply');
+    apply_button.addEventListener('click', apply_changes)
     text_input_form.appendChild(apply_button);
 }
+
 function init()
 {
-    document.getElementById('input_headline').value = headline;
-    document.getElementById('input_subheadline').value = subheadline;
-    document.getElementById('input_text_1').value = text_1;
-    document.getElementById('input_text_2').value = text_2;
-    document.getElementById('input_text_3').value = text_3;
 
     document.getElementById('apply_button').addEventListener('click', apply_changes);
-    document.getElementById('select_background').addEventListener('change', change_background);
+    document.getElementById('select_background').addEventListener('change', change_current_picture);
     document.getElementById('select_background').value = default_background;
+
+    document.getElementById('select_layout').addEventListener('change', function(){ set_layout(this.value); });
 }
