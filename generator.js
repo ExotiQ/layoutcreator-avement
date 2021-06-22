@@ -33,6 +33,7 @@ let default_background = "Picture 3"
 let layouts = [];
 let current_layout = 2;
 
+
 let format = 1;
 let canvas_scale = 0.9;
 
@@ -710,7 +711,29 @@ function get_layouts_by_attributes(attributes)
 
 function set_format(width, height)
 {
-    format = width / height;
+    if(width != 0 && height != 0)
+    {
+        format = width / height;    
+    }
+}
+
+function suggest_format(usecase)
+{
+    switch (usecase.toLowerCase())
+    {
+        case 'poster':
+            return ['DIN A1 Poster', 'DIN A2 Poster', 'DIN A3 Poster', 'DIN A4 Poster'];
+
+        case 'instagram':
+            return ['Square'];
+
+        case 'events':
+            return ['DIN A1 Poster', 'Square', 'DIN A2 Poster', 'DIN A3 Poster', 'DIN A4 Poster'];
+
+        case 'banner':
+            return ['Banner'];
+
+    }
 }
 
 
@@ -850,6 +873,28 @@ function set_text_input()
     text_input_form.appendChild(apply_button);
 }
 
+function filter_layouts()
+{
+    print('changed layouts');   
+    let format_form = document.getElementById('suggested_formats');
+    let children = format_form.children;
+
+    while(children[0])
+    {
+        children[0].remove();
+    }
+
+    let suggestions = suggest_format(this.getAttribute('value'));
+
+    for(let i = 0; i < suggestions.length; i++) 
+    {
+        let new_button = document.createElement('button');
+        new_button.setAttribute('id', suggestions[i]);
+        new_button.value = suggestions[i];
+        format_form.appendChild(new_button);
+    };
+}
+
 function init()
 {
 
@@ -858,4 +903,24 @@ function init()
     document.getElementById('select_background').value = default_background;
 
     document.getElementById('select_layout').addEventListener('change', function(){ set_layout(this.value); });
+    
+    //let usecase_form_elements = document.getElementsByClassName("usecase_select");
+    let usecase_form_elements = document.querySelectorAll('#usecase .container')
+    for(let i = 0; i < usecase_form_elements.length; i++)
+    {
+        usecase_form_elements[i].addEventListener('click', filter_layouts);
+    } 
+
+    let format_inputs = document.querySelectorAll('#format_input_form input')
+
+    for(let i = 0; i < format_inputs.length; i++)
+    {
+        format_inputs[i].addEventListener('change', () => { set_format(format_inputs[0].value, format_inputs[1].value); })
+    }
+
+    document.getElementById('select_orientation').addEventListener('change', () => {
+        let tmp = format_inputs[0].value;
+        format_inputs[0].value = format_inputs[1].value;
+        format_inputs[1].value = tmp;
+    })
 }
