@@ -813,12 +813,12 @@ function apply_changes()
     */
 
     let text_input_form = document.getElementById('text_input_form');
-    
+    let inputs = document.querySelectorAll("#text_input_form label input")
     let children = text_input_form.children;
 
     for(let i = 0; i < layouts[current_layout].num_text_fields; i++)
     {
-        layouts[current_layout].default_text[i] = children[i].value;
+        layouts[current_layout].default_text[i] = inputs[i].value;
     }
 }
 
@@ -835,11 +835,14 @@ function set_text_input()
     }
     
     for(let i = 0; i < layouts[current_layout].num_text_fields; i++) 
-    {
+    {   
+        let new_label = document.createElement('label');
         let new_input = document.createElement('input');
+        new_label.innerHTML = layouts[current_layout].text_field_names[i];
         new_input.setAttribute('id', layouts[current_layout].text_field_names[i]);
         new_input.value = layouts[current_layout].default_text[i];
-        text_input_form.appendChild(new_input);
+        new_label.appendChild(new_input);
+        text_input_form.appendChild(new_label);
     };
 
     let apply_button = document.createElement('input');

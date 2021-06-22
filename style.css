@@ -6,20 +6,12 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-header {
-    position: fixed;
-    top: 0px;
-    height: 70px;
-    width: 100%;
-    background-color: #222222;
-}
-
 body {
     display: flex;
     position: absolute;
-    top: 70px;
+
     width: 100%;
-    height: calc( 100% - 70px );
+    height: 100%;
     background-color: #888888;;
 }
 
@@ -32,6 +24,12 @@ top-nav {
     height: 70px;
     display: flex;
     align-items: center;
+    position: fixed;
+    top: 0px;
+    height: 70px;
+    width: 30%;
+    background-color: #222222;
+    right: 0;
 }
 
 top-nav .heading {
@@ -49,7 +47,7 @@ i {
     color: #fff;
     font-size: 32px;
     text-align: center;
-    line-height: 48px;
+    line-height: 1.5 !important;
 }
 
 
@@ -71,6 +69,8 @@ side-nav {
 
 side-nav #settings {
     width: 100%;
+    height: calc( 100% - 70px );
+    margin-top: 70px;
 }
 
 .settings-container {
@@ -93,15 +93,51 @@ side-nav #settings .container {
     background-color: #F6F6F6;
     border-radius: 5px;
     width: calc( 14vw - 70px );
-    margin: 0.5vw;
+    margin-bottom: 0.5vw;
+    padding: 0.5vw;
+}
+
+side-nav .container:nth-child(2n) {
+    margin-right: 0.35vw;
+}
+
+side-nav .settings-container label {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.5vw;
+}
+
+side-nav .settings-container#text input {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.5vw;
+    box-sizing: border-box;
+}
+
+side-nav .settings-container#text label {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.5vw;
+    flex-direction: column;
+}
+
+side-nav form {
+    flex: 100%;
+    margin: 0.5vw 0;
+    padding: 0.5vw 0;
+    color: white;
+}
+
+side-nav input, side-nav select {
+    margin-left: auto;
     padding: 0.5vw;
 }
 
 side-nav .settings-title {
     color: #F6F6F6;
     width: calc( 14vw - 70px );
-    margin: 0.5vw;
-    padding: 0.5vw;
+    margin: 0.5vw 0;
+    padding: 0.5vw 0;
     flex: 100%;
 }
 
@@ -109,6 +145,13 @@ side-nav .settings-title {
     color: #000000;
     font-size: 36px;
 }
+
+.settings-container {
+    margin: 0 0.5vw;
+    padding: 0 0.5vw;
+}
+
+
 
 .settings-container .descritpion {
     color: #000000;
@@ -120,6 +163,8 @@ side-nav #icon-menu {
     background-color: #222222;
     display: flex;
     flex-direction: column;
+    height: calc( 100% - 70px );
+    margin-top: 70px;
 }
 
 side-nav .icon-menu-item{
