@@ -16,7 +16,6 @@ body {
 }
 
 top-nav .logo {
-    padding: 0px 20px;
     max-height: 70px;
 }
 
@@ -35,6 +34,7 @@ top-nav {
 top-nav .heading {
     color: #ffff;
     font-size: 36px;
+    padding-left: 1vw;
 }
 
 i {
