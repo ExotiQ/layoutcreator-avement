@@ -1,4 +1,4 @@
-/* END KARL */
+
 @import url('https://fonts.googleapis.com/css?family=Butterfly+Kids|Roboto');
 
 * {
@@ -89,13 +89,14 @@ side-nav #settings {
 
 side-nav #settings .container {
     color: #000000;
-    height: calc( 14vw - 70px );
+    height: calc( 7vw - 70px );
     background-color: #F6F6F6;
     border-radius: 5px;
     width: calc( 14vw - 70px );
     margin-bottom: 0.5vw;
     padding: 0.5vw;
 }
+
 
 side-nav .container:nth-child(2n) {
     margin-right: 0.35vw;

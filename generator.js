@@ -4,6 +4,8 @@ let logo;
 let logo_black;
 let logo_2;
 
+let current_state = 0;
+
 const Y_AXIS = 1;
 const X_AXIS = 2;
 
@@ -46,12 +48,43 @@ let red_01;
 
 let toggle_grid = false;
 
+let current_usecase = ''
+
+let formats = 
+{
+    'DIN A1': [594, 841],
+    'DIN A2': [420, 594],
+    'DIN A3': [297, 420],
+    'DIN A4': [210, 297],
+    'Square': [100, 100],
+    'Banner': [250, 50]
+}
+let prevMouseX = 0;
+let prevMouseY = 0;
+
+let img_delta_x = 0;
+let img_delta_y = 0;
+let img_scale = 1;
+let img_dd_x = 0;
+let img_dd_y = 0;
+
+let img_transform_toggle = false;
+
 class Layout
 {
-    constructor(name, attributes,  num_text_fields, text_field_names, default_text, layout_function)
+    constructor(name, 
+                min_format, 
+                max_format, 
+                usecases, 
+                num_text_fields, 
+                text_field_names, 
+                default_text, 
+                layout_function)
     {
         this.name = name;
-        this.attributes = attributes;
+        this.min_format = min_format;
+        this.max_format = max_format;
+        this.usecases = usecases;
         this.draw_function = layout_function;
         this.num_text_fields = num_text_fields;
         this.text_field_names = text_field_names;
@@ -165,14 +198,71 @@ function wrapped_text(str, char_limit, text_size, leading, x, y)
 
 function scaled_background_image(img)
 {
-    let din_ratio = width / height;
-    if(img.width / img.height < din_ratio)
+    let ratio = width / height;
+    if(img.width / img.height < ratio)
     {
-        image(img, 0, 0, width, height, 0, (img.height - height * (img.width / width)) / 2, img.width, img.width * (1 / din_ratio));
+        image(img, 
+              0, 
+              0, 
+              width, 
+              height, 
+              img_delta_x, 
+              (img.height - height * (img.width / width)) / 2 + img_delta_y, 
+              img.width * img_scale, 
+              img.width * (1 / ratio) * img_scale);
     }
     else 
     {
-        image(img, 0, 0, width, height, (img.width - width * (img.height / height)) / 2, 0, img.height * (din_ratio), img.height);
+        image(img, 
+              0, 
+              0, 
+              width, 
+              height, 
+              (img.width - width * (img.height / height)) / 2 + img_delta_x, 
+              img_delta_y, 
+              img.height * (ratio) * img_scale, 
+              img.height * img_scale);
+    }
+}
+
+function transformable_image(img, x, y, t_width, t_height)
+{
+    let ratio = t_width / t_height;
+    if(img.width / img.height < ratio)
+    {
+        let dx = img_delta_x;
+        let dy = (img.height - t_height * (img.width / t_width)) / 2 + img_delta_y;
+        if(dx <= 0) { dx = 0; }        
+        if(dy <= 0) { dy = 0; }
+        if(dx + img_scale * img.width >= img.width) { dx = img.width - (img_scale * img.width);}
+        if(dy + img_scale * img.height >= img.height) { dy = img.height - (img_scale * img.height);}
+        image(img, 
+              x, 
+              y, 
+              t_width, 
+              t_height, 
+              dx, 
+              dy, 
+              img.width * img_scale, 
+              img.width * (1 / ratio) * img_scale);
+    }
+    else 
+    {
+        let dx = (img.width - t_width * (img.height / t_height)) / 2 + img_delta_x;
+        let dy = img_delta_y;
+        if(dx <= 0) { dx = 0; }
+        if(dy <= 0) { dy = 0; }
+        if(dx + img_scale * img.width >= img.width) { dx = img.width - (img_scale * img.width);}
+        if(dy + img_scale * img.height >= img.height) { dy = img.height - (img_scale * img.height);}
+        image(img, 
+              x, 
+              y, 
+              t_width, 
+              t_height, 
+              dx, 
+              dy, 
+              img.height * (ratio) * img_scale, 
+              img.height * img_scale);
     }
 }
 
@@ -248,12 +338,14 @@ function style_3()
 
 function vertical_layout_1()
 {
+    /*
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
     
     resizeCanvas(1480, 2100);
     resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
 
+    */
     // adjusting global layout parameters
     margins = [10, 10, 10, 10];
     num_cols = 4;
@@ -264,7 +356,11 @@ function vertical_layout_1()
     col_width = (width - 2 * abs_margins[1]) / num_cols;
 
     // placing the background image
-    scaled_background_image(background_img);
+    transformable_image(background_img,
+                        0,
+                        0,
+                        width,
+                        height);
 
     // creating bottom gradient
     let box_y = grid_snap(height * 0.4);
@@ -313,11 +409,13 @@ function vertical_layout_1()
 
 function vertical_layout_2()
 {
+    /*
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
 
     resizeCanvas(1480, 2100);
     resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
+    */
     // adjusting global layout parameters
     margins = [2.5, 2.5, 2.5, 2.5];
     num_cols = 4;
@@ -339,26 +437,13 @@ function vertical_layout_2()
 
     let headline_space = abs_margins[1] + 0.2 * inner_width;
 
-    if(background_img.height / background_img.width > 1)
-    {
-    image(background_img, 
-          headline_space, abs_margins[0], 
-          t_image_width, t_image_height, 
-          0, 
-          0, 
-          background_img.width, 
-          background_img.width / t_image_ratio);
-    }
-    else
-    {
-        image(background_img, 
-            headline_space, abs_margins[0], 
-            t_image_width, t_image_height, 
-            0, 
-            0, 
-            background_img.height *  t_image_ratio, 
-            background_img.height); 
-    }
+    
+    transformable_image(background_img, 
+                        headline_space, abs_margins[0], 
+                        t_image_width, 
+                        t_image_height);
+    
+    
 
     draw_logo(inner_width, 2*abs_margins[0] + 0.8 * logo.height, 0.23 * width, "RIGHT");
 
@@ -450,12 +535,14 @@ function vertical_layout_2()
 
 function square_layout_1()
 {
+    /*
     let workspace_width = 0.7 * windowWidth;
     let workspace_height = windowHeight - 70;
     
     resizeCanvas(1000, 1000);
     resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
 
+    */
     // adjusting global layout parameters
     margins = [10, 10, 10, 10];
     abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
@@ -463,7 +550,11 @@ function square_layout_1()
     font_size = height / 25;
 
     // placing the background image
-    scaled_background_image(background_img);
+    transformable_image(background_img,
+                        0,
+                        0,
+                        width,
+                        height);
 
     // creating bottom gradient
     let box_y = height * 0.4;
@@ -506,6 +597,12 @@ function show_columns()
 
 function change_current_picture()
 {
+    img_delta_x = 0;
+    img_delta_y = 0;
+    img_dd_x = 0;
+    img_dd_y = 0;
+    img_scale = 1;
+
     let select = document.getElementById('select_background');
     switch (select.value)
     {
@@ -638,7 +735,23 @@ function mousePressed()
             redraw();
         }
     }
+    
+    
 }
+
+function mouseWheel(event)
+{
+    if(img_transform_toggle)
+    {
+        img_scale += 0.001 * event.delta;
+        if(img_scale > 1) { img_scale = 1; }
+        if(img_scale <= 0) { img_scale = 0.00001}
+        img_dd_x = 0.5 * (background_img.width - background_img.width * img_scale);
+        img_dd_y = 0.5 * (background_img.height - background_img.height * img_scale);
+    }
+}
+
+
 
 function keyPressed()
 {
@@ -651,12 +764,18 @@ function keyPressed()
     {
         toggle_grid = !toggle_grid;
         redraw();
-    }
+    } 
+    
 
 }
 
 function set_layout(name)
 {
+    img_delta_x = 0;
+    img_delta_y = 0;
+    img_dd_x = 0;
+    img_dd_y = 0;
+    img_scale = 1;
     for(let i = 0; i < layouts.length; i++)
     {
         if(layouts[i].name == name)
@@ -722,13 +841,13 @@ function suggest_format(usecase)
     switch (usecase.toLowerCase())
     {
         case 'poster':
-            return ['DIN A1 Poster', 'DIN A2 Poster', 'DIN A3 Poster', 'DIN A4 Poster'];
+            return ['DIN A1', 'DIN A2', 'DIN A3', 'DIN A4'];
 
         case 'instagram':
             return ['Square'];
 
         case 'events':
-            return ['DIN A1 Poster', 'Square', 'DIN A2 Poster', 'DIN A3 Poster', 'DIN A4 Poster'];
+            return ['DIN A1', 'Square', 'DIN A2', 'DIN A3', 'DIN A4'];
 
         case 'banner':
             return ['Banner'];
@@ -782,33 +901,56 @@ function setup()
     red_01 = color(210, 59, 59);
 
     layouts.push(new Layout('din_poster_vertical_1', 
-                            ['poster', 'vertical', 'event'], 
+                            0.6,
+                            0.8,
+                            ['events', 'poster'], 
                             5, 
                             ['Headline', 'Subheadline', 'Text 1', 'Text 2', 'Text 3'],
                             ['SKATE CONTEST', 'AUGSBURG 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg'],
                             vertical_layout_1));
     layouts.push(new Layout('din_poster_vertical_2', 
-                            ['poster', 'vertical', 'event'], 
+                            0.6,
+                            0.75, 
+                            ['events', 'poster'], 
                             6, 
                             ['Headline', 'Text 1', 'Text 2', 'Text 3', 'Text 4', 'Text 5'],
                             ['SKATE CONTEST 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg', 'Riders Confirmed: Matt Hoffman - Enarson - Matthias Danidos', 'Highest Ollie:200€ / Best Trick:200€ / Vert Ramp Contest:500€'],
                             vertical_layout_2));
     layouts.push(new Layout('instagram_ad_1', 
-                            ['instagram', 'vertical', 'horizontal'], 
+                            1,
+                            1,
+                            ['instagram', 'events'],
                             2, 
                             ['Headline', 'Subheadline'],
                             ['SKATE CONTEST', 'AUGSBURG 2021'],
                             square_layout_1));
 
-    init();
+    interface_init();
 
-    set_text_input();
+
+    //frameRate(10);
 }
 
 
 function draw()
 {
-    let workspace_width = 0.7 * windowWidth;
+    //print(frameRate());
+    if(keyIsDown(16))
+    {
+        img_transform_toggle = true;
+        print('d_x: ' + img_dd_x + ', d_Y: ' + img_dd_y + ', scale: ' + img_scale)
+    }
+    else 
+    {
+        img_transform_toggle = false;
+    }  
+    if(mouseIsPressed && img_transform_toggle)
+    {
+        img_delta_x -= mouseX - prevMouseX;
+        img_delta_y -= mouseY - prevMouseY;
+    }
+
+    let workspace_width = 0.7 * windowWidth - 70;
     let workspace_height = windowHeight - 70;
 
     let tmp_width = 1480;
@@ -816,11 +958,41 @@ function draw()
     target_area = (canvas_scale * tmp_width * (workspace_height / tmp_height)) * (canvas_scale * workspace_height);
 
     let scaled_width = sqrt(target_area * format);
+    if(scaled_width > workspace_width) { scaled_width = workspace_width; }
     let scaled_height = scaled_width / format;
 
-    frameRate(10);
-    layouts[current_layout].draw();
+
+    //print('width: ' + scaled_width + ', height: ' + scaled_height);
+
+    resizeCanvas(scaled_width, scaled_height);
+
+
+    switch(current_state)
+    {
+        case 0:
+            //print('0: ' + current_state)
+            background(191);
+            break;
+
+        case 1:
+            //print('1: ' + current_state)
+            background(255);
+            break;
+    
+        case 2:
+            //print('2: ' + current_state)
+            layouts[current_layout].draw();
+            break;
+    
+        default:
+            //print(current_state)
+            background(255);
+            break;
+    }
+    prevMouseX = mouseX;
+    prevMouseY = mouseY;
 }
+
 
 
 function apply_changes()
@@ -876,54 +1048,110 @@ function set_text_input()
     text_input_form.appendChild(apply_button);
 }
 
-function filter_layouts()
+function filter_formats(val)
 {
-    print('changed layouts');   
+    print('changed formats');   
+    current_usecase = val;
+    print(current_usecase);
     let format_form = document.getElementById('suggested_formats');
     let children = format_form.children;
+    
 
     while(children[0])
     {
         children[0].remove();
     }
 
-    let suggestions = suggest_format(this.getAttribute('value'));
+    let suggestions = suggest_format(val);
 
     for(let i = 0; i < suggestions.length; i++) 
     {
-        let new_button = document.createElement('button');
-        new_button.setAttribute('id', suggestions[i]);
-        new_button.value = suggestions[i];
+        let new_button = document.createElement('div');
+        new_button.setAttribute('class', 'container');
+        new_button.setAttribute('value', suggestions[i]);
+        new_button.innerHTML = '<span class="title">' + suggestions[i] + '</span>';
+        new_button.addEventListener('click', function() { 
+            current_state = current_state + (current_state == 0);
+            let val = this.getAttribute('value');
+            document.getElementById('input_width').value = formats[val][0];
+            document.getElementById('input_height').value = formats[val][1];
+            let dims = formats[val];
+            filter_layouts(dims[0], dims[1]); 
+        });
         format_form.appendChild(new_button);
     };
 }
 
-function init()
+function filter_layouts(t_width, t_height)
 {
+    set_format(t_width, t_height)
+    let filtered_layouts = [];
+    print('current format: ' + format);
+    for(let i = 0; i < layouts.length; i++)
+    {
+        if(layouts[i].usecases.includes(current_usecase.toLowerCase()))
+        {
+            if(format >= layouts[i].min_format && format <= layouts[i].max_format)
+            {
+                filtered_layouts.push(layouts[i].name);
+            }
+        }
+    }
+    print(filtered_layouts)
+    let layout_form = document.getElementById('suggested_layouts');
+    let children = layout_form.children;
+    
+
+    while(children[0])
+    {
+        children[0].remove();
+    }
+    for(let i = 0; i < filtered_layouts.length; i++) 
+    {
+        let new_button = document.createElement('div');
+        new_button.setAttribute('class', 'container');
+        new_button.setAttribute('value', filtered_layouts[i]);
+        new_button.innerHTML = '<span class="title">' + filtered_layouts[i] + '</span>';
+        new_button.addEventListener('click', function() { 
+            current_state = 2;
+            set_layout(this.getAttribute('value')); 
+        });
+        layout_form.appendChild(new_button);
+    };
+}
+
+function interface_init()
+{
+    set_text_input();
 
     document.getElementById('apply_button').addEventListener('click', apply_changes);
     document.getElementById('select_background').addEventListener('change', change_current_picture);
     document.getElementById('select_background').value = default_background;
 
-    document.getElementById('select_layout').addEventListener('change', function(){ set_layout(this.value); });
+    //document.getElementById('select_layout').addEventListener('change', function(){ set_layout(this.value); });
     
     //let usecase_form_elements = document.getElementsByClassName("usecase_select");
     let usecase_form_elements = document.querySelectorAll('#usecase .container')
     for(let i = 0; i < usecase_form_elements.length; i++)
     {
-        usecase_form_elements[i].addEventListener('click', filter_layouts);
+        usecase_form_elements[i].addEventListener('click', function () 
+        { 
+            current_state = 0;
+            filter_formats(this.getAttribute('value')); 
+        });
     } 
 
     let format_inputs = document.querySelectorAll('#format_input_form input')
 
     for(let i = 0; i < format_inputs.length; i++)
     {
-        format_inputs[i].addEventListener('change', () => { set_format(format_inputs[0].value, format_inputs[1].value); })
+        format_inputs[i].addEventListener('change', () => { filter_layouts(format_inputs[0].value, format_inputs[1].value); });
     }
 
     document.getElementById('select_orientation').addEventListener('change', () => {
         let tmp = format_inputs[0].value;
         format_inputs[0].value = format_inputs[1].value;
         format_inputs[1].value = tmp;
-    })
+        filter_layouts(format_inputs[0].value, format_inputs[1].value);
+    });
 }
