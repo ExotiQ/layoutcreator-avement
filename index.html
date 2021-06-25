@@ -108,12 +108,10 @@
 
         <div class="settings-container" id="background">
             <h1 class="settings-title">IMAGE</h1>
+            <p>Press SHIFT and use your mousewheel to scale the image or drag your mouse to move it </p>  
+             <input id='img_transform_button' type='button' value='Move Image'>
 
-            <select id="select_background">
-              <option value="Picture 1">Picture 1</option>
-              <option value="Picture 2">Picture 2</option>
-              <option value="Picture 3">Picture 3</option>
-            </select>
+            <form id="suggested_images"><div></div></form>
         </div>
 
         <div class="settings-container" id="text">
@@ -129,16 +127,14 @@
 
         <div class="settings-container" id="export">
             <h1 class="settings-title">EXPORT</h1>
-
-            <div class="container">
-                <span class="title">Werbeplakat</span>
-                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
-            </div>
-
-            <div class="container">
-                <span class="title">Werbeplakat</span>
-                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
-            </div>
+            <form id='export_form'>
+                <input id="export_file_name" value='file_name'>
+                <select id="select_file_format" value='.jpg'>
+                    <option value=".jpg">.jpg</option>
+                    <option value=".png">.png</option>
+                </select> 
+                <button id='export_button'>Export</button>  
+            </form>
         </div>
     </div>
 </side-nav>

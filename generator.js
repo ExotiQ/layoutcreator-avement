@@ -4,6 +4,9 @@ let logo;
 let logo_black;
 let logo_2;
 
+let canvas;
+let save_name = '';
+
 let current_state = 0;
 
 const Y_AXIS = 1;
@@ -69,6 +72,14 @@ let img_dd_x = 0;
 let img_dd_y = 0;
 
 let img_transform_toggle = false;
+let img_transform_toggle2 = false;
+
+let images = 
+[
+    'assets/pexels-jan-medium.jpg',
+    'assets/pexels-tim-mossholder-even-smaller.jpg',
+    'assets/vans-park-series.jpg'
+]
 
 class Layout
 {
@@ -79,7 +90,8 @@ class Layout
                 num_text_fields, 
                 text_field_names, 
                 default_text, 
-                layout_function)
+                layout_function,
+                thumbnail = '')
     {
         this.name = name;
         this.min_format = min_format;
@@ -89,6 +101,7 @@ class Layout
         this.num_text_fields = num_text_fields;
         this.text_field_names = text_field_names;
         this.default_text = default_text;
+        this.thumbnail = thumbnail;
     }
 
     draw()
@@ -545,7 +558,11 @@ function square_layout_1()
     */
     // adjusting global layout parameters
     margins = [10, 10, 10, 10];
-    abs_margins = [(height * margins[0]) / 100, (width * margins[1]) / 100, (height * margins[2]) / 100, (width * margins[3]) / 100];
+    abs_margins = [(height * margins[0]) / 100, 
+                   (width * margins[1]) / 100, 
+                   (height * margins[2]) / 100, 
+                   (width * margins[3]) / 100];
+
     grid_increment = height / 50;
     font_size = height / 25;
 
@@ -608,17 +625,14 @@ function change_current_picture()
     {
         case 'Picture 1':
             background_img = loadImage("assets/pexels-tim-mossholder-even-smaller.jpg");
-            print(select.value);
             break;
 
         case 'Picture 2':
             background_img = loadImage("assets/vans-park-series.jpg");
-            print(select.value);
             break;
 
         case 'Picture 3':
             background_img = loadImage("assets/pexels-jan-medium.jpg");
-            print(select.value);
             break;
     }
 }
@@ -765,6 +779,10 @@ function keyPressed()
         toggle_grid = !toggle_grid;
         redraw();
     } 
+    else if(key == 'p')
+    {
+        //save(canvas, save_name)
+    } 
     
 
 }
@@ -836,7 +854,7 @@ function set_format(width, height)
     }
 }
 
-function suggest_format(usecase)
+function suggest_format(usecase = '')
 {
     switch (usecase.toLowerCase())
     {
@@ -851,6 +869,12 @@ function suggest_format(usecase)
 
         case 'banner':
             return ['Banner'];
+
+        case '':
+            return ['DIN A1', 'Square', 'DIN A2', 'DIN A3', 'DIN A4'];
+        
+        default:
+            return[];
 
     }
 }
@@ -882,7 +906,6 @@ function preload()
 
 function setup()
 {
-    var canvas;
     
     if(background_img.width < background_img.height)
     {
@@ -907,7 +930,8 @@ function setup()
                             5, 
                             ['Headline', 'Subheadline', 'Text 1', 'Text 2', 'Text 3'],
                             ['SKATE CONTEST', 'AUGSBURG 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg'],
-                            vertical_layout_1));
+                            vertical_layout_1,
+                            'assets/thumbnails/din_poster_vertical_1.jpg'));
     layouts.push(new Layout('din_poster_vertical_2', 
                             0.6,
                             0.75, 
@@ -915,7 +939,8 @@ function setup()
                             6, 
                             ['Headline', 'Text 1', 'Text 2', 'Text 3', 'Text 4', 'Text 5'],
                             ['SKATE CONTEST 2021', '12.07.2021, 15 - 18h', 'FREE FOOD & DRINKS, DJ, PRIZES', 'Henrys Skateland - Second Street 2, 86163 Augsburg', 'Riders Confirmed: Matt Hoffman - Enarson - Matthias Danidos', 'Highest Ollie:200€ / Best Trick:200€ / Vert Ramp Contest:500€'],
-                            vertical_layout_2));
+                            vertical_layout_2,
+                            'assets/thumbnails/din_poster_vertical_2.jpg'));
     layouts.push(new Layout('instagram_ad_1', 
                             1,
                             1,
@@ -923,7 +948,8 @@ function setup()
                             2, 
                             ['Headline', 'Subheadline'],
                             ['SKATE CONTEST', 'AUGSBURG 2021'],
-                            square_layout_1));
+                            square_layout_1,
+                            'assets/thumbnails/instagram_ad_1.jpg'));
 
     interface_init();
 
@@ -934,20 +960,28 @@ function setup()
 
 function draw()
 {
-    //print(frameRate());
-    if(keyIsDown(16))
+    
+    if(keyIsDown(16) || img_transform_toggle2)
     {
         img_transform_toggle = true;
-        print('d_x: ' + img_dd_x + ', d_Y: ' + img_dd_y + ', scale: ' + img_scale)
     }
     else 
     {
         img_transform_toggle = false;
     }  
-    if(mouseIsPressed && img_transform_toggle)
+    
+    if(img_transform_toggle)
     {
-        img_delta_x -= mouseX - prevMouseX;
-        img_delta_y -= mouseY - prevMouseY;
+        if(mouseIsPressed)
+        {
+            img_delta_x -= mouseX - prevMouseX;
+            img_delta_y -= mouseY - prevMouseY;
+             
+        }
+        cursor(MOVE);  
+    }
+    else {
+        cursor(ARROW);
     }
 
     let workspace_width = 0.7 * windowWidth - 70;
@@ -1050,7 +1084,6 @@ function set_text_input()
 
 function filter_formats(val)
 {
-    print('changed formats');   
     current_usecase = val;
     print(current_usecase);
     let format_form = document.getElementById('suggested_formats');
@@ -1084,22 +1117,32 @@ function filter_formats(val)
 
 function filter_layouts(t_width, t_height)
 {
-    set_format(t_width, t_height)
+    
     let filtered_layouts = [];
     print('current format: ' + format);
-    for(let i = 0; i < layouts.length; i++)
+    if(t_width == -1)
     {
-        if(layouts[i].usecases.includes(current_usecase.toLowerCase()))
+        layouts.forEach(function ()
         {
-            if(format >= layouts[i].min_format && format <= layouts[i].max_format)
+            //filtered_layouts.push(this.name);
+        })
+    }
+    else 
+    {
+        set_format(t_width, t_height);
+        for(let i = 0; i < layouts.length; i++)
+        {
+            if(layouts[i].usecases.includes(current_usecase.toLowerCase()))
             {
-                filtered_layouts.push(layouts[i].name);
+                if(format >= layouts[i].min_format && format <= layouts[i].max_format)
+                {
+                    filtered_layouts.push(layouts[i].name);
+                }
             }
         }
     }
-    print(filtered_layouts)
-    let layout_form = document.getElementById('suggested_layouts');
-    let children = layout_form.children;
+    const layout_form = document.getElementById('suggested_layouts');
+    const children = layout_form.children;
     
 
     while(children[0])
@@ -1109,9 +1152,11 @@ function filter_layouts(t_width, t_height)
     for(let i = 0; i < filtered_layouts.length; i++) 
     {
         let new_button = document.createElement('div');
+        let thumbnail = document.createElement('img');
+        thumbnail.setAttribute('src', './assets/thumbnails/' + filtered_layouts[i] + '.jpg');
         new_button.setAttribute('class', 'container');
         new_button.setAttribute('value', filtered_layouts[i]);
-        new_button.innerHTML = '<span class="title">' + filtered_layouts[i] + '</span>';
+        new_button.appendChild(thumbnail);
         new_button.addEventListener('click', function() { 
             current_state = 2;
             set_layout(this.getAttribute('value')); 
@@ -1120,18 +1165,75 @@ function filter_layouts(t_width, t_height)
     };
 }
 
+function suggest_images()
+{
+    const image_form = document.getElementById('suggested_images');
+    const children = image_form.children;
+    
+    while(children && children[0])
+    {
+        children[0].remove();
+    }
+    for(let i = 0; i < images.length; i++) 
+    {
+        let new_button = document.createElement('div');
+        let new_picture = document.createElement('img');
+        new_picture.setAttribute('src', images[i]);
+        new_button.setAttribute('class', 'container');
+        new_button.appendChild(new_picture)
+        new_button.addEventListener('click', function() { 
+            img_delta_x = 0;
+            img_delta_y = 0;
+            img_dd_x = 0;
+            img_dd_y = 0;
+            img_scale = 1;
+            background_img = loadImage(this.firstChild.getAttribute('src'));
+        });
+        image_form.appendChild(new_button);
+    };
+}
+
+function export_file()
+{
+    const export_form = document.getElementById('export_form');
+    const file_name = document.getElementById('export_file_name');
+    const suffix = document.getElementById('select_file_format');
+
+    file_name.addEventListener('change', function() 
+    {
+        if(this.value.includes('.'))
+        {
+            let suffix = document.getElementById('select_file_format');
+            let split_value = this.value.split('.');
+            if(split_value[split_value.length - 1] == 'jpg')
+            {
+                suffix.value = '.jpg'
+            }
+            else if (split_value[split_value.length - 1] == 'png')
+            {
+                suffix.value = '.png'
+            }
+            this.value = split_value[0]
+        }
+    })
+
+    save(canvas, file_name.value + suffix.value);
+}
+
 function interface_init()
 {
     set_text_input();
 
     document.getElementById('apply_button').addEventListener('click', apply_changes);
-    document.getElementById('select_background').addEventListener('change', change_current_picture);
-    document.getElementById('select_background').value = default_background;
+    //document.getElementById('select_background').addEventListener('change', change_current_picture);
+    //document.getElementById('select_background').value = default_background;
 
     //document.getElementById('select_layout').addEventListener('change', function(){ set_layout(this.value); });
     
     //let usecase_form_elements = document.getElementsByClassName("usecase_select");
-    let usecase_form_elements = document.querySelectorAll('#usecase .container')
+
+    //SUGGEST FORMATS AFTER SELECTING USECASE
+    const usecase_form_elements = document.querySelectorAll('#usecase .container')
     for(let i = 0; i < usecase_form_elements.length; i++)
     {
         usecase_form_elements[i].addEventListener('click', function () 
@@ -1140,18 +1242,52 @@ function interface_init()
             filter_formats(this.getAttribute('value')); 
         });
     } 
+    filter_formats('');
 
-    let format_inputs = document.querySelectorAll('#format_input_form input')
+    //SUGGGEST LAYOUTS AFTER SELECTING FORMATS
+    const format_inputs = document.querySelectorAll('#format_input_form input')
 
     for(let i = 0; i < format_inputs.length; i++)
     {
         format_inputs[i].addEventListener('change', () => { filter_layouts(format_inputs[0].value, format_inputs[1].value); });
     }
+    filter_layouts(-1, -1); 
+    
 
+    //SWAP LENGTH AND HEIGHT WHEN CHANING ORIENTATION
     document.getElementById('select_orientation').addEventListener('change', () => {
         let tmp = format_inputs[0].value;
         format_inputs[0].value = format_inputs[1].value;
         format_inputs[1].value = tmp;
         filter_layouts(format_inputs[0].value, format_inputs[1].value);
     });
+    suggest_images();
+
+    //TOGGLE FOR TRANSFORMING THE IMAGE
+    document.getElementById('img_transform_button').addEventListener('click', () => { img_transform_toggle2 = !img_transform_toggle2;});
+    
+
+    //EVENT FOR EXPORT
+    const file_name = document.getElementById('export_file_name');
+    const suffix = document.getElementById('select_file_format');
+
+    file_name.addEventListener('change', function() 
+    {
+        if(this.value.includes('.'))
+        {
+            let split_value = this.value.split('.');
+            if(split_value[split_value.length - 1] == 'jpg')
+            {
+                suffix.value = '.jpg';
+            }
+            else if (split_value[split_value.length - 1] == 'png')
+            {
+                suffix.value = '.png';
+            }
+            this.value = split_value[0]
+        }
+    })
+    
+    const export_button = document.getElementById('export_button');
+    export_button.addEventListener('click', export_file);
 }

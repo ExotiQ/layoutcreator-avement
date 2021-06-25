@@ -37,6 +37,10 @@ top-nav .heading {
     font-size: 36px;
 }
 
+p {
+    color: #ffff;
+}
+
 i {
     width: 48px;
     height: 48px;
@@ -49,6 +53,8 @@ i {
     text-align: center;
     line-height: 1.5 !important;
 }
+
+
 
 
 #workspace {
@@ -95,6 +101,7 @@ side-nav #settings .container {
     width: calc( 14vw - 70px );
     margin-bottom: 0.5vw;
     padding: 0.5vw;
+    overflow: hidden;
 }
 
 
@@ -121,6 +128,8 @@ side-nav .settings-container#text label {
     margin-bottom: 0.5vw;
     flex-direction: column;
 }
+
+
 
 side-nav form {
     flex: 100%;
