@@ -40,7 +40,7 @@
             <i class="fas fa-ruler-horizontal"></i>
         </div>
         <div class="icon-menu-item" id="layout">
-            <i class="fas fa-ruler-horizontal"></i>
+            <i class="fas fa-th-large"></i>
         </div>
         <div class="icon-menu-item" id="background">
             <i class="fas fa-image"></i>
@@ -57,24 +57,22 @@
         <!-- GENERAL -->
         <div class="settings-container active" id="usecase">
             <h1 class="settings-title">USECASE</h1>
+            <div class="grid">
+                <div class="container" value="poster">
+                    <span class="title">Poster</span>
+                </div>
 
-            <div class="container" value="poster">
-                <span class="title">Poster</span>
-            </div>
+                <div class="container" value="instagram">
+                    <span class="title">Instagram</span>
+                </div>
 
-            <div class="container" value="instagram">
-                <span class="title">Instagram</span>
-                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
-            </div>
+                <div class="container" value="banner">
+                    <span class="title">Banner</span>
+                </div>
 
-            <div class="container" value="banner">
-                <span class="title">Banner</span>
-                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
-            </div>
-
-            <div class="container" value="events">
-                <span class="title">Events</span>
-                <p class="description">Lorem Ipsum dolores, et via di Mare</p>
+                <div class="container" value="events">
+                    <span class="title">Events</span>
+                </div>
             </div>
         </div>
 
@@ -82,28 +80,36 @@
         <div class="settings-container" id="size">
             <h1 class="settings-title">FORMAT</h1>
             <form id="format_input_form">
-                <select id="select_unit">
-                    <option value="Millimeters">Millimeters</option>
-                    <option value="Centimeters">Centimeters</option>
-                    <option value="Inches">Inches</option>
-                    <option value="Pixels">Pixels</option>
-                </select>
-                <input id="input_width" value='0'>
-                <input id="input_height" value='0'>
-                <select id="select_orientation">
-                    <option value="horizontal">Horizontal</option>
-                    <option value="vertical">Vertical</option>
-                </select>
+                <label for="select_unit">Units
+                    <select id="select_unit">
+                        <option value="Millimeters">Millimeters</option>
+                        <option value="Centimeters">Centimeters</option>
+                        <option value="Inches">Inches</option>
+                        <option value="Pixels">Pixels</option>
+                    </select>
+                </label>
+                <label for="input_width">Breite 
+                    <input type="number" id="input_width">
+                </label> 
+                <label for="input_height">Höhe 
+                    <input type="number" id="input_height">
+                </label> 
+                <label for="select_orientation">Orientation  
+                    <select id="select_orientation">
+                        <option value="horizontal">Horizontal</option>
+                        <option value="vertical">Vertical</option>
+                    </select>
+                </label>    
               </form>
             <h1 class="settings-title">SUGGESTED</h1>
 
-            <form id="suggested_formats"></form>
+                <form id="suggested_formats" class="grid"></form>
         </div>
 
         <div class="settings-container" id="layout">
             <h1 class="settings-title">LAYOUT</h1>
 
-            <form id="suggested_layouts"></form>
+            <form id="suggested_layouts" class="grid"></form>
         </div>
 
         <div class="settings-container" id="background">
@@ -111,7 +117,7 @@
             <p>Press SHIFT and use your mousewheel to scale the image or drag your mouse to move it </p>  
              <input id='img_transform_button' type='button' value='Move Image'>
 
-            <form id="suggested_images"><div></div></form>
+            <form id="suggested_images" class="grid"><div></div></form>
         </div>
 
         <div class="settings-container" id="text">
@@ -128,12 +134,18 @@
         <div class="settings-container" id="export">
             <h1 class="settings-title">EXPORT</h1>
             <form id='export_form'>
-                <input id="export_file_name" value='file_name'>
-                <select id="select_file_format" value='.jpg'>
-                    <option value=".jpg">.jpg</option>
-                    <option value=".png">.png</option>
-                </select> 
-                <button id='export_button'>Export</button>  
+                <label for="export_file_name">Filename 
+                    <input id="export_file_name" value='file_name'>
+                </label> 
+                <label for="select_file_format">Fileformat
+                    <select id="select_file_format" value='.jpg'>
+                        <option value=".jpg">.jpg</option>
+                        <option value=".png">.png</option>
+                    </select> 
+                </label> 
+                
+                
+                <button class="next-button export" id='export_button'>Export</button>  
             </form>
         </div>
     </div>
