@@ -142,6 +142,8 @@ side-nav form {
 side-nav input, side-nav select {
     margin-left: auto;
     padding: 0.5vw;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
 }
 
 side-nav .settings-title {
