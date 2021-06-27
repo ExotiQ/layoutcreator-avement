@@ -25,6 +25,11 @@ let industry_black_italic;
 let politica_ultra;
 let politica_bold;
 let politica_medium;
+let filson_black;
+let filson_bold;
+let antarctican_regular;
+let antarctican_thin;
+let antarctican_black;
 
 let font_size;
 
@@ -540,10 +545,145 @@ function vertical_layout_2()
                      height - abs_margins[0],
                      inner_width - headline_space + abs_margins[1], 
                      1,
-                     'BOTTOM'
-                     ) 
+                     'BOTTOM'); 
 
 
+}
+function vertical_layout_3()
+{
+    /*
+    let workspace_width = 0.7 * windowWidth;
+    let workspace_height = windowHeight - 70;
+    
+    resizeCanvas(1480, 2100);
+    resizeCanvas(canvas_scale * width * (workspace_height / height), canvas_scale * workspace_height);
+
+    */
+    // adjusting global layout parameters
+    margins = [10, 10, 10, 10];
+    num_cols = 4;
+    abs_margins = [(width * margins[0]) / 100, (width * margins[1]) / 100, (width * margins[2]) / 100, (width * margins[3]) / 100];
+    grid_increment = height / 50;
+    col_margin = width / 20;
+    font_size = height / 25;
+    col_width = (width - 2 * abs_margins[1]) / num_cols;
+
+    // placing the background image
+    /*
+    transformable_image(background_img,
+                        0,
+                        0,
+                        width,
+                        height);
+    */
+
+    background(red_01)
+
+    // placing the headline
+    textAlign(CENTER);
+    noStroke();
+    fill(255);
+    textFont(filson_black);
+    let headline_height = justified_text('avément', 
+                                         width/2, 
+                                         abs_margins[0] - grid_increment, 
+                                         width - (2 * abs_margins[1]), 
+                                         10 * font_size, 
+                                         1 * font_size, 
+                                         'TOP');
+
+    textFont(antarctican_black);
+    justified_text(this.default_text[0].toUpperCase(), 
+                   width/2, 
+                   abs_margins[0] - grid_increment + headline_height,
+                   width - (2 * abs_margins[1]),
+                   2 * font_size, 
+                   0.5 * font_size, 
+                   'TOP');
+
+    let increment = height / 4;
+    let text_spacing = -0.3 * grid_increment;
+    textFont(antarctican_thin);
+
+    while(increment < 0.75 * height)
+    {
+        let t_height = justified_text('STORE OPENING', 
+                                      width/2, 
+                                      increment,
+                                      width - (2 * abs_margins[1]),
+                                      2 * font_size, 
+                                      0.5 * font_size, 
+                                      'TOP');
+
+        increment += t_height + text_spacing;
+
+    }
+
+    // creating the three lines of text
+    textAlign(LEFT);
+    fill(255);
+    textFont(antarctican_black);
+
+    let base_height = grid_increment * 37.5;  
+
+    let height_increment = 4 * grid_increment;
+    let spacing = 0.03 * abs_margins[0];
+
+    textFont(antarctican_black);
+    let text_1_height = justified_text(this.default_text[1], 
+                                       abs_margins[1], 
+                                       base_height + height_increment, 
+                                       column(3) - column(0),
+                                       1.5 * font_size, 
+                                       0.5 * font_size, 
+                                       'TOP');
+    height_increment += text_1_height  + spacing;
+
+    let text_2_height = justified_text(this.default_text[2].toUpperCase(), 
+                                       abs_margins[1],     
+                                       base_height + height_increment, 
+                                       column(3) - column(0),
+                                       1.0 * font_size, 
+                                       0.5 * font_size, 
+                                       'TOP');
+    height_increment += text_2_height + spacing;
+
+    textFont(antarctican_regular);
+    let text_3_height = justified_text(this.default_text[3], 
+                                       abs_margins[1],     
+                                       base_height + height_increment, 
+                                       column(3) - column(0),
+                                       0.6 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    height_increment += text_3_height + spacing;
+
+    let text_4_height = justified_text(this.default_text[4], 
+                                       abs_margins[1], 
+                                       base_height + height_increment, 
+                                       column(3) - column(0),
+                                       0.6 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    height_increment += text_4_height + spacing;
+
+    let text_5_height = justified_text(this.default_text[5], 
+                                       abs_margins[1], 
+                                       base_height + height_increment, 
+                                       column(3) - column(0),
+                                       0.6 * font_size, 
+                                       0.3 * font_size, 
+                                       'TOP');
+
+    // placing the logo
+    push()
+    translate(column(3), base_height + 5 * grid_increment - 0.75 * text_1_height);
+    let scale_factor = (4 * grid_increment + 0.75 * text_1_height) / logo_2.height
+    scale(scale_factor);
+    image(logo_2, (col_width - (logo_2.width * scale_factor)) / scale_factor, 0.5 * grid_increment);
+    pop();    
 }
 
 function square_layout_1()
@@ -858,7 +998,7 @@ function suggest_format(usecase = '')
 {
     switch (usecase.toLowerCase())
     {
-        case 'poster':
+        case 'store opening':
             return ['DIN A1', 'DIN A2', 'DIN A3', 'DIN A4'];
 
         case 'instagram':
@@ -893,6 +1033,11 @@ function preload()
     politica_ultra = loadFont("fonts/Politica/Politica_Ultra.otf");
     politica_bold = loadFont("fonts/Politica/Politica_Bold.otf");
     politica_medium = loadFont("fonts/Politica/Politica_Medium.otf");
+    filson_black= loadFont("fonts/filson/filson_pro_black.otf");;
+    filson_bold= loadFont("fonts/filson/filson_pro_bold.otf");
+    antarctican_regular = loadFont("fonts/antarctican/antarctican_mono_regular.otf");;
+    antarctican_thin = loadFont("fonts/antarctican/antarctican_mono_thin.otf");;
+    antarctican_black = loadFont("fonts/antarctican/antarctican_mono_black.otf");;
 
     vans_logo.push(loadImage('assets/logos/vans_logo_white.png'));
     vans_logo.push(loadImage('assets/logos/vans_logo_black.png'));
@@ -950,6 +1095,15 @@ function setup()
                             ['SKATE CONTEST', 'AUGSBURG 2021'],
                             square_layout_1,
                             'assets/thumbnails/instagram_ad_1.jpg'));
+    layouts.push(new Layout('store_opening_01', 
+                            0.6,
+                            0.75,
+                            ['store opening'],
+                            5, 
+                            ['Address', 'Date', 'Text 1', 'Text 2', 'Text 3'],
+                            ['Musterstraße 9, 86153 Augsburg', 'May 20th 2021, 13 - 18h', '20% Off on the First Week', 'Lorem ipsum dolor sit amet, consetetur', 'sadipscing elitr, sed diam nonumy'],
+                            vertical_layout_3,
+                            'assets/thumbnails/store_opening_01.png'));
 
     interface_init();
 
