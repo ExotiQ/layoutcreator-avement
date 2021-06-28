@@ -1028,29 +1028,29 @@ function preload()
 {
     background_img = loadImage("assets/pexels-jan-medium.jpg");
 
-    logo = loadImage("assets/avement_logo_white.svg");
-    logo_black = loadImage("assets/avement_logo_black.svg");
-    logo_2 = loadImage("assets/avement_logo_white_2.svg");
-    montserrat_extrabold = loadFont("fonts/Montserrat/Montserrat-ExtraBold.ttf");
-    montserrat_medium = loadFont("fonts/Montserrat/Montserrat-Medium.ttf");
-    industry_black_italic = loadFont("fonts/Industry/Industry_Black_Italic.ttf");
-    politica_ultra = loadFont("fonts/Politica/Politica_Ultra.ttf");
-    politica_bold = loadFont("fonts/Politica/Politica_Bold.ttf");
-    politica_medium = loadFont("fonts/Politica/Politica_Medium.ttf");
-    filson_black= loadFont("fonts/filson/filson_pro_black.ttf");
-    filson_bold= loadFont("fonts/filson/filson_pro_bold.ttf");
-    antarctican_regular = loadFont("fonts/antarctican/antarctican_mono_regular.ttf");
-    antarctican_thin = loadFont("fonts/antarctican/antarctican_mono_thin.ttf");
-    antarctican_black = loadFont("fonts/antarctican/antarctican_mono_black.ttf");
+    logo = loadImage("./assets/avement_logo_white.svg");
+    logo_black = loadImage("./assets/avement_logo_black.svg");
+    logo_2 = loadImage("./assets/avement_logo_white_2.svg");
+    montserrat_extrabold = loadFont("./fonts/Montserrat/Montserrat-ExtraBold.ttf");
+    montserrat_medium = loadFont("./fonts/Montserrat/Montserrat-Medium.ttf");
+    industry_black_italic = loadFont("./fonts/Industry/Industry_Black_Italic.ttf");
+    politica_ultra = loadFont("./fonts/Politica/Politica_Ultra.ttf");
+    politica_bold = loadFont("./fonts/Politica/Politica_Bold.ttf");
+    politica_medium = loadFont("./fonts/Politica/Politica_Medium.ttf");
+    filson_black= loadFont("./fonts/Filson/filson_pro_black.ttf");
+    filson_bold= loadFont("./fonts/Filson/filson_pro_bold.ttf");
+    antarctican_regular = loadFont("./fonts/Antarctican/antarctican_mono_regular.ttf");
+    antarctican_thin = loadFont("./fonts/Antarctican/antarctican_mono_thin.ttf");
+    antarctican_black = loadFont("./fonts/Antarctican/antarctican_mono_black.ttf");
 
-    vans_logo.push(loadImage('assets/logos/vans_logo_white.png'));
-    vans_logo.push(loadImage('assets/logos/vans_logo_black.png'));
-    bones_logo.push(loadImage('assets/logos/bones_logo_white.png'));
-    bones_logo.push(loadImage('assets/logos/bones_logo_black.png'));
-    titus_logo.push(loadImage('assets/logos/titus_logo_white_2.png'));
-    titus_logo.push(loadImage('assets/logos/titus_logo_black_2.png'));
-    thrasher_logo.push(loadImage('assets/logos/thrasher_logo_white.png'));
-    thrasher_logo.push(loadImage('assets/logos/thrasher_logo_black.png'));
+    vans_logo.push(loadImage('./assets/logos/vans_logo_white.png'));
+    vans_logo.push(loadImage('./assets/logos/vans_logo_black.png'));
+    bones_logo.push(loadImage('./assets/logos/bones_logo_white.png'));
+    bones_logo.push(loadImage('./assets/logos/bones_logo_black.png'));
+    titus_logo.push(loadImage('./assets/logos/titus_logo_white_2.png'));
+    titus_logo.push(loadImage('./assets/logos/titus_logo_black_2.png'));
+    thrasher_logo.push(loadImage('./assets/logos/thrasher_logo_white.png'));
+    thrasher_logo.push(loadImage('./assets/logos/thrasher_logo_black.png'));
 } 
 
 function setup()
