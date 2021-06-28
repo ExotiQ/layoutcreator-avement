@@ -467,7 +467,7 @@ function vertical_layout_2()
     
     
 
-    draw_logo(inner_width, 2*abs_margins[0] + 0.8 * logo.height, 0.23 * width, "RIGHT");
+    draw_logo(inner_width, 3*abs_margins[0], 0.23 * width, "RIGHT");
 
     push();
     translate(0, height);
@@ -718,7 +718,7 @@ function square_layout_1()
                         height);
 
     // creating bottom gradient
-    let box_y = height * 0.4;
+    let box_y = height * 0.5;
     setGradient(0, box_y, width, height - box_y, c_0, c_1, Y_AXIS);
 
     // placing the headline
@@ -726,12 +726,12 @@ function square_layout_1()
     noStroke();
     fill(yellow_01);
     textFont(industry_black_italic);
-    justified_text(this.default_text[0], abs_margins[1], 0.7 * height, width - (2 * abs_margins[1]) , 7 * font_size, 0.5 * font_size, 'BOTTOM');
+    justified_text(this.default_text[0], abs_margins[1], 0.75 * height, width - (2 * abs_margins[1]) , 7 * font_size, 0.5 * font_size, 'BOTTOM');
 
     textAlign(LEFT);
     fill(255);
     textFont(politica_bold);
-    justified_text(this.default_text[1], abs_margins[1], 0.7 * height + 0.01 * height, width - (2 * abs_margins[1]), 1.7 * font_size, 1* font_size, 'TOP' )
+    justified_text(this.default_text[1], abs_margins[1], 0.75 * height + 0.01 * height, width - (2 * abs_margins[1]), 1.7 * font_size, 1* font_size, 'TOP' )
     // creating the three lines of text
 }
 
@@ -1033,15 +1033,15 @@ function preload()
     logo_2 = loadImage("assets/avement_logo_white_2.svg");
     montserrat_extrabold = loadFont("fonts/Montserrat/Montserrat-ExtraBold.ttf");
     montserrat_medium = loadFont("fonts/Montserrat/Montserrat-Medium.ttf");
-    industry_black_italic = loadFont("fonts/Industry/Industry_Black_Italic.otf");
-    politica_ultra = loadFont("fonts/Politica/Politica_Ultra.otf");
-    politica_bold = loadFont("fonts/Politica/Politica_Bold.otf");
-    politica_medium = loadFont("fonts/Politica/Politica_Medium.otf");
-    filson_black= loadFont("fonts/filson/filson_pro_black.otf");;
-    filson_bold= loadFont("fonts/filson/filson_pro_bold.otf");
-    antarctican_regular = loadFont("fonts/antarctican/antarctican_mono_regular.otf");;
-    antarctican_thin = loadFont("fonts/antarctican/antarctican_mono_thin.otf");;
-    antarctican_black = loadFont("fonts/antarctican/antarctican_mono_black.otf");;
+    industry_black_italic = loadFont("fonts/Industry/Industry_Black_Italic.ttf");
+    politica_ultra = loadFont("fonts/Politica/Politica_Ultra.ttf");
+    politica_bold = loadFont("fonts/Politica/Politica_Bold.ttf");
+    politica_medium = loadFont("fonts/Politica/Politica_Medium.ttf");
+    filson_black= loadFont("fonts/filson/filson_pro_black.ttf");
+    filson_bold= loadFont("fonts/filson/filson_pro_bold.ttf");
+    antarctican_regular = loadFont("fonts/antarctican/antarctican_mono_regular.ttf");
+    antarctican_thin = loadFont("fonts/antarctican/antarctican_mono_thin.ttf");
+    antarctican_black = loadFont("fonts/antarctican/antarctican_mono_black.ttf");
 
     vans_logo.push(loadImage('assets/logos/vans_logo_white.png'));
     vans_logo.push(loadImage('assets/logos/vans_logo_black.png'));

@@ -144,6 +144,26 @@ side-nav input, side-nav select {
     padding: 0.5vw;
     -webkit-appearance: none;
     -webkit-border-radius: 0;
+    border-radius: 3px;
+    border: none;
+}
+
+side-nav input[type=button] {
+    background-color: black;
+    color: white;
+}
+
+.export {
+    background-color: #22A120;
+    color: white;
+    border-radius: 3px;
+    border: none;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.export:hover {
+    background-color: #37d335;
 }
 
 side-nav .settings-title {
