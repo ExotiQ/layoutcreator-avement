@@ -83,7 +83,11 @@ let images =
 [
     'assets/pexels-jan-medium.jpg',
     'assets/pexels-tim-mossholder-even-smaller.jpg',
-    'assets/vans-park-series.jpg'
+    'assets/vans-park-series.jpg',
+    'assets/pexels-allan-mas-5370615.jpg',
+    'assets/pexels-budgeron-bach-5157733.jpg',
+    'assets/pexels-josh-hild-2422264.jpg',
+    'assets/pexels-monstera-5384417.jpg'
 ]
 
 class Layout
@@ -252,8 +256,8 @@ function transformable_image(img, x, y, t_width, t_height)
         let dy = (img.height - t_height * (img.width / t_width)) / 2 + img_delta_y;
         if(dx <= 0) { dx = 0; }        
         if(dy <= 0) { dy = 0; }
-        if(dx + img_scale * img.width >= img.width) { dx = img.width - (img_scale * img.width);}
-        if(dy + img_scale * img.height >= img.height) { dy = img.height - (img_scale * img.height);}
+        if(dx + img.width * img_scale * img_scale >= img.width) { dx = img.width - (img.width * img_scale);}
+        if(dy + img.width * (1 / ratio) * img_scale >= img.height) { dy = img.height - (img.width * (1 / ratio) * img_scale);}
         image(img, 
               x, 
               y, 
@@ -270,8 +274,8 @@ function transformable_image(img, x, y, t_width, t_height)
         let dy = img_delta_y;
         if(dx <= 0) { dx = 0; }
         if(dy <= 0) { dy = 0; }
-        if(dx + img_scale * img.width >= img.width) { dx = img.width - (img_scale * img.width);}
-        if(dy + img_scale * img.height >= img.height) { dy = img.height - (img_scale * img.height);}
+        if(dx + img.height * (ratio) * img_scale >= img.width) { dx = img.width - (img.height * (ratio) * img_scale);}
+        if(dy + img.height * img_scale >= img.height) { dy = img.height - (img.height * img_scale);}
         image(img, 
               x, 
               y, 
