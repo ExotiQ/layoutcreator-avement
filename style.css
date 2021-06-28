@@ -103,6 +103,13 @@ side-nav #settings .container {
     margin-bottom: 0.5vw;
     padding: 0.5vw;
     overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+side-nav #settings .container:active {
+    background-color: #bbbbbb;
 }
 
 
